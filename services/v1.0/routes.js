@@ -15,7 +15,7 @@ module.exports = app => {
     // @http-verb : get
     // @table : ActivityQuestion
     // @header : expects Authorization Bearer
-    // @body : expects { "Email" : "xpto@xpt.com", "Password" : "qwerty" }
+    // @body : expects queryString param "id", which is the Activity_PK
     router.get('/activities/questions/:id', controller.activities.getQuestions);
 
     app.use('/services/v1.0', router);
