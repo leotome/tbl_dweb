@@ -49,20 +49,22 @@ exports.register = async (req, res) => {
     }
 };
 
-function authenticateToken(req, res) {
+
+// Este método será importante para garantir que as chamadas à API são feitas apenas por utilizadores autenticados
+// Ainda não implementado, por isso fica comentado. =)
+/*
+exports.authenticateToken = (req, res) => {
     const Authorization = req.headers["authorization"];
     if(Authorization !== undefined){
         const token = Authorization && Authorization.split(" ")[1];
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
             if (err) {
-                HelperIsAutenticated = false;
                 return false;
             }
-            HelperIsAutenticated = true;
             return true;
           });
     } else {
-        HelperIsAutenticated = false;
         return false;
     }
 }
+*/
