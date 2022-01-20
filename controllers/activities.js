@@ -1,7 +1,7 @@
-const activity = require("../models/config_models").activity;
+const activities = require("../models/config_models").activities;
 
 exports.getAll = async (req, res) => {
-    activity.cRud_allActivities()
+    activities.cRud_allActivities()
     .then(result => {
         res.status(200).send(result);
     })
@@ -11,7 +11,7 @@ exports.getAll = async (req, res) => {
 }
 
 exports.getQuestions = async (req, res) => {
-    activity.cRud_questionsByActivity(req.params.id)
+    activities.cRud_questionsByActivity(req.params.id)
     .then(result => {
         res.status(200).send(result);
     })

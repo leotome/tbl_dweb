@@ -5,9 +5,9 @@ module.exports = app => {
     // @http-verb : post
     // @table : User
     // @body : expects { "emails" : [...]}
-    router.post('/users/login', controller.user.login);
+    router.post('/users/login', controller.users.login);
 
-    router.get('/activities/questions/:id', controller.activity.getQuestions);
+    router.get('/activities/questions/:id', controller.activities.getQuestions);
 
     app.use('/services/v1.0', router);
 }
