@@ -1,10 +1,10 @@
-const users = require("../models/config_models").users;
+const user = require("../models/config_models").user;
 
 exports.login = async (req, res) => {
     if (req.body === undefined || req.body === null) {
         return res.status(400).send({message: "O conteúdo não pode ser vazio!"});
     }
-    users.cRud_usersByEmail(req.body.emails)
+    user.cRud_usersByEmail(req.body.emails)
     .then(result => {
         res.status(200).send(result);
     })

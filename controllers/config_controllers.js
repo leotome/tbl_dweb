@@ -1,6 +1,8 @@
-const table_users = require("./table_users");
+const table_user = require("./table_user");
+const table_activity = require("./table_activity");
 
 
 module.exports = {
-    users : table_users
+    user : table_user,
+    activity : table_activity
 }
