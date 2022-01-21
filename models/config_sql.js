@@ -4,10 +4,10 @@ require("dotenv").config();
 exports.connect = () => {
     const config = {
         db : {
-            host : process.env.DB_HOST || 'sql4.freemysqlhosting.net',
-            database : process.env.DB_NAME || 'sql4465671',
-            user : process.env.DB_USER || 'sql4465671',
-            password : process.env.DB_PASSWORD || 'vcL5AmPeJ6'
+            host : process.env.DB_HOST || 'holonet.pt',
+            database : process.env.DB_NAME || 'holonetp_ual_dweb_tbl',
+            user : process.env.DB_USER || 'holonetp_ual_dweb_admin',
+            password : process.env.DB_PASSWORD || 'gtK7qgRyF5VXh67U'
         },
         listPerPage: process.env.DB_LIST_PER_PAGE || 10,
     }
