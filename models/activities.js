@@ -20,6 +20,26 @@ exports.cRud_allActivities = () => {
     });
 }
 
+exports.cRud_activitiesByStudent = (params) => {
+    return new Promise((resolve, reject) => {
+        mysql.connect()
+        .then((conn) => {
+            conn
+            .query("SELECT DISTINCT A.Activity_PK, A.Title, A.ImageURL, GS.Group_FK, GS.Student_FK FROM ActivityGroupStudent GS INNER JOIN ActivityGroup G ON GS.Group_FK = G.Group_PK INNER JOIN Activity A ON G.Activity_FK = A.Activity_PK WHERE GroupS.Student_FK = ?", [params])
+            .then(([result]) => {                
+                resolve(result);
+            })
+            .catch((error) => {
+                reject(error.sqlMessage);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            reject(error);
+        });
+    });
+}
+
 exports.cRud_questionsByActivity = (params) => {
     return new Promise((resolve, reject) => {
         mysql.connect()
