@@ -18,5 +18,10 @@ module.exports = app => {
     // @body : expects queryString param "id", which is the Activity_PK
     router.get('/activities/questions/:id', controller.activities.getQuestions);
 
+    // @http-verb : get
+    // @table : CourseGroup
+    // @header : expects Authorization Bearer
+    router.get('/courses/assigned', controller.courses.getStudentCourses);
+
     app.use('/services/v1.0', router);
 }
