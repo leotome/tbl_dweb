@@ -4,10 +4,11 @@ require("dotenv").config();
 exports.connect = () => {
     const config = {
         db : {
-            host : process.env.DB_HOST || 'holonet.pt',
-            database : process.env.DB_NAME || 'holonetp_ual_dweb_tbl',
-            user : process.env.DB_USER || 'holonetp_ual_dweb_admin',
-            password : process.env.DB_PASSWORD || 'gtK7qgRyF5VXh67U'
+            host : process.env.DB_HOST || 'db4free.net',
+            port : process.env.DB_PORT || 3306,
+            database : process.env.DB_NAME || 'ual_dw_tblproj',
+            user : process.env.DB_USER || 'ual_dw_tbl_admin',
+            password : process.env.DB_PASSWORD || 'MNkE7kQ6ckrknzFB'
         },
         listPerPage: process.env.DB_LIST_PER_PAGE || 10,
     }
