@@ -37,14 +37,26 @@ module.exports = app => {
     // @http-verb : get
     // @table : Modules
     // @header : expects Authorization Bearer
-    // @body : expects queryString param "id", which is the Course_FK
-    router.get('/modules/:Course_FK', controller.modules.cRud_modulesByCourse);
+    // @body : expects queryString param "Course_FK", which is the Course_FK
+    router.get('/courses/modules/:Course_FK', controller.modules.cRud_modulesByCourse);
+
+    // @http-verb : get
+    // @table : Activity
+    // @header : expects Authorization Bearer
+    // @body : expects queryString param "Module_FK", which is the Module_FK
+    router.get('/courses/modules/activities/:Module_FK', controller.activities.cRud_activitiesByModule);
+
+    // @http-verb : get
+    // @table : Question
+    // @header : expects Authorization Bearer
+    // @body : expects queryString param "Activity_FK", which is the Activity_FK
+    router.get('/courses/modules/activities/questions/:Activity_FK', controller.questions.cRud_questionsByActivity);
 
     // @http-verb : get
     // @table : ActivityQuestion
     // @header : expects Authorization Bearer
     // @body : expects queryString param "id", which is the Activity_PK
-    router.get('/activities/questions/:id', controller.activities.cRud_questionsByActivity);    
+    router.get('/activities/questions/:id', controller.activities.cRud_questionsByActivity);
 
     app.use('/services/v1.0', router);
 }

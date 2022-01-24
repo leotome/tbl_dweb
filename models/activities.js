@@ -1,12 +1,18 @@
 const mysql = require("./config_sql");
 
-exports.cRud_allActivities = () => {
+exports.cRud_activitiesByModule = (params) => {
     return new Promise((resolve, reject) => {
         mysql.connect()
         .then((conn) => {
+            let query;
+            if(params.Language == 'en'){
+                query = "SELECT Activity_PK, Module_FK, Title, Description, ImageURL, Language, Parent_FK FROM Activity WHERE Language = ? AND Activity_PK IN (SELECT Activity_PK FROM Activity WHERE Module_FK = ?)";
+            } else {
+                query = "SELECT Activity_PK, Module_FK, Title, Description, ImageURL, Language, Parent_FK FROM Activity WHERE Language = ? AND Parent_FK IN (SELECT Activity_PK FROM Activity WHERE Module_FK = ?)";
+            }
             conn
-            .query("SELECT Activity_PK, Title FROM Activity")
-            .then(([result]) => {                
+            .query(query, [params.Language, params.Module_FK])
+            .then(([result]) => {
                 resolve(result);
             })
             .catch((error) => {

@@ -7,6 +7,10 @@ exports.cRud_modulesByCourse = async (req, res) => {
         const message = { message: "You are not authorized to perform this action." };
         return res.status(400).send(message);
     }
+    if(req.params.Course_FK === undefined){
+        const message = { message: "Missing parameter." };
+        return res.status(400).send(message);
+    }
     modules.cRud_modulesByCourse({Language : TokenData.Language, Course_FK : req.params.Course_FK})
     .then(result => {
         if(TokenData.Language == 'en'){
