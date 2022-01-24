@@ -25,7 +25,7 @@ exports.cRud_allCourses = async (req, res) => {
     }
     // FIRST, WE NEED TO VERIFY IF LOGGED USER IS SYSTEM ADMINISTRATOR
     // PERFORM THIS QUERY, THEN DECIDE...
-    users.cRud_usersByEmail(TokenData)
+    users.cRud_usersByEmail(TokenData.Email)
     .then(result => {
         // SYSTEM ADMINISTRATOR PROFILE IS Type_FK = 0
         if(result.Type_FK != 0){
@@ -60,7 +60,7 @@ exports.Crud_createCourse = async (req, res) => {
     }
     // FIRST, WE NEED TO VERIFY IF LOGGED USER IS SYSTEM ADMINISTRATOR
     // PERFORM THIS QUERY, THEN DECIDE...
-    users.cRud_usersByEmail(TokenData)
+    users.cRud_usersByEmail(TokenData.Email)
     .then(result => {
         // SYSTEM ADMINISTRATOR PROFILE IS Type_FK = 0
         if(result.Type_FK != 0){
@@ -95,7 +95,7 @@ exports.crUd_updateCourse = async (req, res) => {
     }
     // FIRST, WE NEED TO VERIFY IF LOGGED USER IS SYSTEM ADMINISTRATOR
     // PERFORM THIS QUERY, THEN DECIDE...
-    users.cRud_usersByEmail(TokenData)
+    users.cRud_usersByEmail(TokenData.Email)
     .then(result => {
         // SYSTEM ADMINISTRATOR PROFILE IS Type_FK = 0
         if(result[0].Type_FK != 0){

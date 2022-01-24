@@ -18,8 +18,8 @@ function authenticateToken(headers) {
                 Helper_TokenData = null;
                 return null;
             }
-            Helper_TokenData = data.Email;
-            return data.Email;
+            Helper_TokenData = data;
+            return data;
           });
     } else {
         Helper_TokenData = null;

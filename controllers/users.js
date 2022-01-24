@@ -12,7 +12,7 @@ exports.login = async (req, res) => {
     users.cRud_usersByEmail([Email])
     .then(async (result) => {
         if(await bcrypt.compare(req.body.Password, result[0].Password)) {
-            const User = { Email : result[0].Email };
+            const User = { Email : result[0].Email, Language : result[0].Language };
             const accessToken = jwt.sign(User, process.env.ACCESS_TOKEN_SECRET);
             res.status(200).json({ message : "Login sucessful!", accessToken: accessToken });
         } else {
@@ -48,23 +48,3 @@ exports.register = async (req, res) => {
         return res.status(400).send({ message: "Bad Request" });
     }
 };
-
-
-// Este método será importante para garantir que as chamadas à API são feitas apenas por utilizadores autenticados
-// Ainda não implementado, por isso fica comentado. =)
-/*
-exports.authenticateToken = (req, res) => {
-    const Authorization = req.headers["authorization"];
-    if(Authorization !== undefined){
-        const token = Authorization && Authorization.split(" ")[1];
-        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-            if (err) {
-                return false;
-            }
-            return true;
-          });
-    } else {
-        return false;
-    }
-}
-*/

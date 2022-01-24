@@ -13,12 +13,6 @@ module.exports = app => {
     router.post('/users/register', controller.users.register);    
 
     // @http-verb : get
-    // @table : ActivityQuestion
-    // @header : expects Authorization Bearer
-    // @body : expects queryString param "id", which is the Activity_PK
-    router.get('/activities/questions/:id', controller.activities.getQuestions);
-
-    // @http-verb : get
     // @table : CourseGroup
     // @header : expects Authorization Bearer
     router.get('/courses/assigned', controller.courses.cRud_studentCourses);
@@ -39,6 +33,18 @@ module.exports = app => {
     // @header : expects Authorization Bearer
     // @body : expects { "Name" : string, "ImagePath" : string }
     router.patch('/courses/update/:Course_PK', controller.courses.crUd_updateCourse);
+
+    // @http-verb : get
+    // @table : Modules
+    // @header : expects Authorization Bearer
+    // @body : expects queryString param "id", which is the Course_FK
+    router.get('/modules/:Course_FK', controller.modules.cRud_modulesByCourse);
+
+    // @http-verb : get
+    // @table : ActivityQuestion
+    // @header : expects Authorization Bearer
+    // @body : expects queryString param "id", which is the Activity_PK
+    router.get('/activities/questions/:id', controller.activities.cRud_questionsByActivity);    
 
     app.use('/services/v1.0', router);
 }
