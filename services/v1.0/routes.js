@@ -35,10 +35,22 @@ module.exports = app => {
     router.patch('/courses/update/:Course_PK', controller.courses.crUd_updateCourse);
 
     // @http-verb : get
-    // @table : Modules
+    // @table : Module
     // @header : expects Authorization Bearer
     // @body : expects queryString param "Course_FK", which is the Course_FK
     router.get('/courses/modules/:Course_FK', controller.modules.cRud_modulesByCourse);
+
+    // @http-verb : get
+    // @table : ModuleDiscussion
+    // @header : expects Authorization Bearer
+    // @body : expects queryString param "Module_FK", which is the Module_FK
+    router.get('/courses/modules/discussions/:Module_FK', controller.discussions.cRud_discussionsByModule);
+
+    // @http-verb : post
+    // @table : ModuleDiscussion
+    // @header : expects Authorization Bearer
+    // @body : expects queryString param "Module_FK", which is the Module_FK, and { "Module_FK" : integer, "Body" : string, "CreatedBy_FK" : integer }
+    router.post('/courses/modules/discussions/create/:Module_FK', controller.discussions.Crud_insertMessage);
 
     // @http-verb : get
     // @table : Activity
