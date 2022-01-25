@@ -2,7 +2,7 @@ const utils = require("./config_utils");
 const questions = require("../models/config_models").questions;
 
 exports.cRud_questionsByActivity = async (req, res) => {
-    let TokenData = utils.authenticateToken(req.headers);
+    let TokenData = utils.authenticateToken(req);
     if(TokenData === null){
         const message = { message: "You are not authorized to perform this action." };
         return res.status(400).send(message);

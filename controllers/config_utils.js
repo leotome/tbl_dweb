@@ -9,20 +9,29 @@ module.exports = {
 
 Helper_TokenData = null;
 
-function authenticateToken(headers) {
-    const Authorization = headers["authorization"];
-    if(Authorization !== undefined){
+function authenticateToken(req) {
+    const Authorization = req.headers["authorization"];
+    const cookies = req.cookies;
+    const token = (cookies !== null) ?  cookies.tbl_app : null;
+    let payload = null;
+    if(token !== null){
+        payload = token;
+    } else if(Authorization !== undefined){
         const token = Authorization && Authorization.split(" ")[1];
+        payload = token;
+    } else {
+        Helper_TokenData = null;
+        return null;
+    }
+    if(payload != null){
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
-            if (err) {
+            if(err){
                 Helper_TokenData = null;
                 return null;
             }
             Helper_TokenData = data;
             return data;
-          });
-    } else {
-        Helper_TokenData = null;
-        return null;
+        });
     }
+    return null;
 }

@@ -3,7 +3,7 @@ const courses = require("../models/config_models").courses;
 const users = require("../models/config_models").users;
 
 exports.cRud_studentCourses = async (req, res) => {
-    let TokenData = utils.authenticateToken(req.headers);
+    let TokenData = utils.authenticateToken(req);
     if(TokenData === null){
         const message = { message: "You are not authorized to perform this action." };
         return res.status(400).send(message);
@@ -18,7 +18,7 @@ exports.cRud_studentCourses = async (req, res) => {
 }
 
 exports.cRud_allCourses = async (req, res) => {
-    let TokenData = utils.authenticateToken(req.headers);
+    let TokenData = utils.authenticateToken(req);
     if(TokenData === null){
         const message = { message: "You are not authorized to perform this action." };
         return res.status(400).send(message);
@@ -49,7 +49,7 @@ exports.cRud_allCourses = async (req, res) => {
 }
 
 exports.Crud_createCourse = async (req, res) => {
-    let TokenData = utils.authenticateToken(req.headers);
+    let TokenData = utils.authenticateToken(req);
     if(TokenData === null){
         const message = { message: "You are not authorized to perform this action." };
         return res.status(400).send(message);
@@ -84,7 +84,7 @@ exports.Crud_createCourse = async (req, res) => {
 }
 
 exports.crUd_updateCourse = async (req, res) => {
-    let TokenData = utils.authenticateToken(req.headers);
+    let TokenData = utils.authenticateToken(req);
     if(TokenData === null){
         const message = { message: "You are not authorized to perform this action." };
         return res.status(400).send(message);

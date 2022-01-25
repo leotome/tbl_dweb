@@ -8,13 +8,17 @@ exports.login = async (req, res) => {
         const message = { message: "Body cannot be empty." };
         return res.status(400).send(message);
     }
-    const Email = req.body.Email;
-    users.cRud_usersByEmail([Email])
+    users.cRud_usersByEmail(req.body)
     .then(async (result) => {
+        if(result.length == 0){
+            const message = { message : "User not found." };
+            return res.status(401).send(message);
+        }
         if(await bcrypt.compare(req.body.Password, result[0].Password)) {
             const User = { Email : result[0].Email, Language : result[0].Language };
-            const accessToken = jwt.sign(User, process.env.ACCESS_TOKEN_SECRET);
-            res.status(200).json({ message : "Login sucessful!", accessToken: accessToken });
+            const accessToken = jwt.sign(User, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 20 * 60});
+            res.cookie("tbl_app", accessToken, {maxAge: 1000 * 60 * 2, httpOnly: true});
+            return res.status(200).json({ message : "Login sucessful!", accessToken: accessToken });
         } else {
             const message = { message : "Password incorrect." };
             return res.status(401).send(message);
@@ -25,7 +29,6 @@ exports.login = async (req, res) => {
     })
 }
 
-// REGISTAR - cria um novo utilizador
 exports.register = async (req, res) => {
     if (!req.body) {
         const message = { message: "Body cannot be empty." };
