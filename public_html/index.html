@@ -1,16 +1,76 @@
 <html>
     <head>
         <script type="text/javascript">
-            function googleTranslateElementInit() {
-                new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,pt'}, 'google_translate_element');
+
+            function getAPIURI(){
+                var currentPort = (window.location.port == '' || window.location.port == 0) ? '' : ':' + window.location.port;
+                var currentProtocol = window.location.protocol;
+                var currentHost = window.location.hostname;
+                var URI = currentProtocol + '//' + currentHost + currentPort + '/services/v1.0/';
+                return URI;
+            }            
+
+            function doAuth(){
+                let email = document.getElementById("email").value;
+                let password = document.getElementById("password").value;
+                let User = {
+                    Email : email,
+                    Password : password
+                }
+                console.log(User);
+                let request_url = this.getAPIURI() + 'users/login';
+                let request_params = {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    method : "POST",
+                    body : JSON.stringify(User)
+                }
+                fetch(request_url, request_params)
+                .then(async (response) => {
+                    var result = await response.json();
+                    console.log('doAuth().result', result);
+                })
+                .catch(async (error) => {
+                    alert('doAuth().error = ' + JSON.stringify(error));
+                }) 
+            }
+
+            function doTest(){
+                let request_url = this.getAPIURI() + 'courses/assigned';
+                let request_params = {
+                    method : "GET"
+                }
+                fetch(request_url, request_params)
+                .then(async (response) => {
+                    var result = await response.json();
+                    console.log('doTest().result', result);
+                    document.getElementById("answer").innerHTML = JSON.stringify(result);
+                })
+                .catch(async (error) => {
+                    alert('doTest().error = ' + JSON.stringify(error));
+                })
             }
         </script>
-        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     </head>
     <body>
-        <div id="google_translate_element"></div>
-        <!-- É uma abordagem simples, no entanto podemos "customizar" esse serviço com estes passos: https://bit.ly/3FWdzsm -->
-        <!-- Um outro artigo muito interessante para ajudar na customização: https://forums.mobirise.com/discussion/27314/heres-the-code-for-translate-with-google-on-website-without-powered-by-google -->
         <div>Hello world!</div>
+        <div>Please try to authenticate below:</div>
+        <div>
+            <table>
+                <tr><td>E-mail: <input type="text" id="email"/></td></tr>
+                <tr><td>Password: <input type="text" id="password"/></td></tr>
+                <tr><td><button type="button" onclick="doAuth()">Submit</button></td></tr>
+            </table>
+        </div>
+        <br/>
+        <div>
+            <button type="button" onclick="doTest()">Try request</button>
+        </div>
+        <br/>
+        <div id="answer">
+
+        </div>
+
     </body>
 </html>
