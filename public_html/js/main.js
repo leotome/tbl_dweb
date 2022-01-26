@@ -1,12 +1,3 @@
-/*  ---------------------------------------------------
-    Template Name: Ogani
-    Description:  Ogani eCommerce  HTML Template
-    Author: Colorlib
-    Author URI: https://colorlib.com
-    Version: 1.0
-    Created: Colorlib
----------------------------------------------------------  */
-
 'use strict';
 
 (function ($) {
@@ -17,6 +8,12 @@
     $(window).on('load', function () {
         $(".loader").fadeOut();
         $("#preloder").delay(200).fadeOut("slow");
+
+        let token = localStorage.getItem('tbl_app');
+        if(token){
+            let logged = `<li><a href="./user.html">${localStorage.getItem('tbl_user')}</a></li><li><a href="#" onclick="doLogout()">Logout</a></li>`;
+            $("#tbl_usermenu").empty().append(logged);
+        }
     });
 
     /*------------------

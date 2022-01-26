@@ -1,11 +1,3 @@
-function getAPIURI(){
-    var currentPort = (window.location.port == '' || window.location.port == 0) ? '' : ':' + window.location.port;
-    var currentProtocol = window.location.protocol;
-    var currentHost = window.location.hostname;
-    var URI = currentProtocol + '//' + currentHost + currentPort + '/services/v1.0/';
-    return URI;
-}            
-
 function doLogin(){
     let email = document.getElementById("login_email").value;
     let password = document.getElementById("login_password").value;
@@ -32,6 +24,69 @@ function doLogin(){
     fetch(request_url, request_params)
     .then(async (response) => {
         var result = await response.json();
+        var success = response.ok;
+        if(result.message && success == false){
+            alert(result.message);
+            return;
+        } else if(success == false){
+            alert('An unknown error occurred. Please contact support, or try again later.');
+            return;
+        }
+        console.log('doLogin().result', result);
+        localStorage.setItem("tbl_app", result.accessToken);
+        localStorage.setItem("tbl_user", result.fullName);
+        let my_page = this.getBaseURI() + 'my.html';
+        window.open(my_page, "_self");
+    })
+    .catch(async (error) => {
+        alert('doLogin().error = ' + JSON.stringify(error));
+    })
+}
+
+function doRegister(){
+    let fname = document.getElementById("register_fname").value;
+    let lname = document.getElementById("register_lname").value;
+    let phone = document.getElementById("register_phone").value;
+    let email = document.getElementById("register_email").value;
+    let password = document.getElementById("register_password").value;
+    if(fname == ''){
+        alert('Please provide an First Name.');
+        return;
+    }    
+    if(lname == ''){
+        alert('Please provide Last Name.');
+        return;
+    }    
+    if(phone == ''){
+        alert('Please provide a phone.');
+        return;
+    }    
+    if(email == ''){
+        alert('Please provide an e-mail.');
+        return;
+    }
+    if(password == ''){
+        alert('Please provide a password.');
+        return;
+    }
+    let User = {
+        FirstName : fname,
+        LastName : lname,
+        Phone : phone,
+        Email : email,
+        Password : password
+    }
+    let request_url = this.getAPIURI() + 'users/register';
+    let request_params = {
+        headers: {
+            "Content-Type": "application/json",
+        },
+        method : "POST",
+        body : JSON.stringify(User)
+    }
+    fetch(request_url, request_params)
+    .then(async (response) => {
+        var result = await response.json();
         if(result.message){
             alert(result.message);
         }
@@ -40,4 +95,18 @@ function doLogin(){
     .catch(async (error) => {
         alert('doLogin().error = ' + JSON.stringify(error));
     }) 
+}
+
+function doLogout(){
+    let request_url = this.getAPIURI() + 'users/logout';
+    fetch(request_url)
+    .then(async (response) => {
+        localStorage.removeItem("tbl_app");
+        localStorage.removeItem("tbl_user");
+        let home = this.getBaseURI();
+        window.open(home, "_self");
+    })
+    .catch(async (error) => {
+        alert('doLogout().error = ' + JSON.stringify(error));
+    })
 }

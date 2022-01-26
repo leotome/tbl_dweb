@@ -41,12 +41,13 @@
                     <nav class="header__menu">
                         <ul>
                             <li><a href="./index.html">Home</a></li>
+                            <li><a href="./my.html">My Courses</a></li>
                         </ul>
                     </nav>
                 </div>
                 <div class="col-lg-3">
                     <div class="header__cart">
-                        <ul>
+                        <ul id="tbl_usermenu">
                             <li><a href="#" data-toggle="modal" data-target="#login_modal">Login</a></li>
                             <li><a href="#" data-toggle="modal" data-target="#register_modal">Register</a></li>
                         </ul>
@@ -61,7 +62,7 @@
     <!-- Header Section End -->
 
     <!-- Blog Details Hero Begin -->
-    <section class="blog-details-hero set-bg" data-setbg="img/front/front-books.jpg">
+    <section class="blog-details-hero set-bg" data-setbg="img/banners/front-books.jpg">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -179,7 +180,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-primary" onclick="doRegister()">Submit</button>
                 </div>
             </div>
         </div>
@@ -195,6 +196,7 @@
     <script src="js/mixitup.min.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/js.cookie.min.js"></script>
+    <script src="js/common.js"></script>
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
 </body>
