@@ -1,76 +1,201 @@
-<html>
-    <head>
-        <script type="text/javascript">
+<!DOCTYPE html>
+<html lang="en">
 
-            function getAPIURI(){
-                var currentPort = (window.location.port == '' || window.location.port == 0) ? '' : ':' + window.location.port;
-                var currentProtocol = window.location.protocol;
-                var currentHost = window.location.hostname;
-                var URI = currentProtocol + '//' + currentHost + currentPort + '/services/v1.0/';
-                return URI;
-            }            
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Team-based learning | Home</title>
 
-            function doAuth(){
-                let email = document.getElementById("email").value;
-                let password = document.getElementById("password").value;
-                let User = {
-                    Email : email,
-                    Password : password
-                }
-                console.log(User);
-                let request_url = this.getAPIURI() + 'users/login';
-                let request_params = {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    method : "POST",
-                    body : JSON.stringify(User)
-                }
-                fetch(request_url, request_params)
-                .then(async (response) => {
-                    var result = await response.json();
-                    console.log('doAuth().result', result);
-                })
-                .catch(async (error) => {
-                    alert('doAuth().error = ' + JSON.stringify(error));
-                }) 
-            }
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
 
-            function doTest(){
-                let request_url = this.getAPIURI() + 'courses/assigned';
-                let request_params = {
-                    method : "GET"
-                }
-                fetch(request_url, request_params)
-                .then(async (response) => {
-                    var result = await response.json();
-                    console.log('doTest().result', result);
-                    document.getElementById("answer").innerHTML = JSON.stringify(result);
-                })
-                .catch(async (error) => {
-                    alert('doTest().error = ' + JSON.stringify(error));
-                })
-            }
-        </script>
-    </head>
-    <body>
-        <div>Hello world!</div>
-        <div>Please try to authenticate below:</div>
-        <div>
-            <table>
-                <tr><td>E-mail: <input type="text" id="email"/></td></tr>
-                <tr><td>Password: <input type="text" id="password"/></td></tr>
-                <tr><td><button type="button" onclick="doAuth()">Submit</button></td></tr>
-            </table>
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+    <!-- Page Preloder -->
+
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="header__logo">
+                        <a href="./index.html"><img src="img/logo.png" alt="" style="max-width: 119px;"></a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <nav class="header__menu">
+                        <ul>
+                            <li><a href="./index.html">Home</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3">
+                    <div class="header__cart">
+                        <ul>
+                            <li><a href="#" data-toggle="modal" data-target="#login_modal">Login</a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#register_modal">Register</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="humberger__open">
+                <i class="fa fa-bars"></i>
+            </div>
         </div>
-        <br/>
-        <div>
-            <button type="button" onclick="doTest()">Try request</button>
-        </div>
-        <br/>
-        <div id="answer">
+    </header>
+    <!-- Header Section End -->
 
+    <!-- Blog Details Hero Begin -->
+    <section class="blog-details-hero set-bg" data-setbg="img/front/front-books.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="blog__details__hero__text">
+                        <h2>"Team-based learning provides students with the opportunity to collaboratively solve problems."</h2>
+                    </div>
+                </div>
+            </div>
         </div>
+    </section>
+    <!-- Blog Details Hero End -->
 
-    </body>
+    <!-- Related Blog Section Begin -->
+    <section class="related-blog spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title related-blog-title">
+                        <h2>Welcome!</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="blog__item__text">
+                        <h5>"Team-based learning" is a pedagogical strategy that consists of combining activities in a structured way to promote group study and improve the quality of learning of individuals in the group. The "Team-based learning" methodology consists of modules that are divided into a cycle of three phases: preparation, classroom tests, and application exercises focused on the topic being discussed.</h5>
+                        <p>To participate, please register!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Related Blog Section End -->
+
+    <!-- Footer Section Begin -->
+    <footer class="footer spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="footer__copyright">
+                        <div class="footer__copyright__text">
+                            <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Login Modal Start -->
+    <div class="modal fade" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table style="width: 100%">
+                        <tr>
+                            <td><label for="login_email">E-mail:</label></td>
+                            <td><input type="text" id="login_email" name="login_email" style="width: 100%"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="login_password">Password:</label></td>
+                            <td><input type="password" id="login_password" name="login_password" style="width: 100%"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="doLogin()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Login Modal End -->
+
+    <!-- Register Modal Start -->
+    <div class="modal fade" id="register_modal" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerModalLabel">Register</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table style="width: 100%">
+                        <tr>
+                            <td><label for="register_fname">First Name: </label></td>
+                            <td><input type="text" id="register_fname" name="register_fname" style="width: 100%" placeholder="John"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="register_lname">Last Name:</label></td>
+                            <td><input type="text" id="register_lname" name="register_lname" style="width: 100%" placeholder="Appleseed"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="register_phone">Phone:</label></td>
+                            <td><input type="text" id="register_phone" name="register_phone" style="width: 100%" placeholder="+351 900 123 000"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="register_email">E-mail:</label></td>
+                            <td><input type="email" id="register_email" name="register_email" style="width: 100%" placeholder="appleseed@example.com"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="register_password">Password:</label></td>
+                            <td><input type="password" id="register_password" name="register_password" style="width: 100%"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Register Modal End -->
+
+    <!-- Js Plugins -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/mixitup.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/js.cookie.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+</body>
 </html>
