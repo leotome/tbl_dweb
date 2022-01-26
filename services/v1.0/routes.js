@@ -10,7 +10,15 @@ module.exports = app => {
     // @http-verb : post
     // @table : User
     // @body : expects { "FirstName" : string, "LastName" : string, "Phone" : string, "Email" : string, "Password" : string }
-    router.post('/users/register', controller.users.register);    
+    router.post('/users/register', controller.users.register);
+
+    // @http-verb : get
+    // @table : User
+    router.get('/users/information', controller.users.information);
+
+    // @http-verb : get
+    // @table : User
+    router.get('/users/logout', controller.users.logout);
 
     // @http-verb : get
     // @table : CourseGroup

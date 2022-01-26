@@ -1,4 +1,5 @@
 const users = require("../models/config_models").users;
+const utils = require("./config_utils");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -15,10 +16,15 @@ exports.login = async (req, res) => {
             return res.status(401).send(message);
         }
         if(await bcrypt.compare(req.body.Password, result[0].Password)) {
-            const User = { Email : result[0].Email, Language : result[0].Language };
+            const User = { 
+                FirstName : result[0].FirstName,
+                LastName : result[0].LastName,
+                Phone : result[0].Phone,
+                Email : result[0].Email,
+                Language : result[0].Language };
             const accessToken = jwt.sign(User, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 20 * 60});
             res.cookie("tbl_app", accessToken, {maxAge: 1000 * 60 * 2, httpOnly: true});
-            return res.status(200).json({ message : "Login sucessful!", accessToken: accessToken });
+            return res.status(200).json({ message : "Login sucessful!", fullName : User.FirstName + ' ' + User.LastName , accessToken: accessToken });
         } else {
             const message = { message : "Password incorrect." };
             return res.status(401).send(message);
@@ -50,4 +56,24 @@ exports.register = async (req, res) => {
     } catch {
         return res.status(400).send({ message: "Bad Request" });
     }
+};
+
+exports.information = async (req, res) => {
+    let TokenData = utils.authenticateToken(req);
+    if(TokenData === null){
+        const message = { message: "You are not authorized to perform this action." };
+        return res.status(400).send(message);
+    }
+    users.cRud_usersByEmail(TokenData)
+    .then((result) => {
+        return res.status(201).send(result);
+    })
+    .catch((error) => {
+        res.status(400).send({message: JSON.stringify(error)});
+    });
+};
+
+exports.logout = async (req, res) => {
+    res.clearCookie('tbl_app');
+    res.status(440).send({message : 'Logout successful'});
 };

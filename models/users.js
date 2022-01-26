@@ -6,7 +6,7 @@ exports.cRud_usersByEmail = (params) => {
         .then((conn) => {
             conn
             .query("SELECT User_PK, FirstName, LastName, Language, Phone, Email, Password, Type_FK FROM User WHERE Email IN (?)", [params.Email])
-            .then(([result]) => {                
+            .then(([result]) => {
                 resolve(result);
             })
             .catch((error) => {
