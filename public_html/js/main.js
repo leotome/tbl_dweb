@@ -12,7 +12,9 @@
         let token = localStorage.getItem('tbl_app');
         if(token){
             let logged = `<li><a href="./user.html">${localStorage.getItem('tbl_user')}</a></li><li><a href="#" onclick="doLogout()">Logout</a></li>`;
+            let fullmenu = `<li><a href="./my.html">My Courses</a></li>`;
             $("#tbl_usermenu").empty().append(logged);
+            $("#tbl_menu").append(fullmenu);
         }
     });
 
