@@ -21,37 +21,44 @@ module.exports = app => {
     router.get('/users/logout', controller.users.logout);
 
     // @http-verb : get
+    // @table : Course
+    // @auth : header Authorization Bearer OR Cookie "tbl_app"
+    router.get('/courses', controller.courses.cRud_allCourses);
+
+
+    // @http-verb : get
     // @table : CourseGroup
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
     router.get('/courses/assigned', controller.courses.cRud_studentCourses);
+
+    // @http-verb : post
+    // @table : Course
+    // @auth : header Authorization Bearer OR Cookie "tbl_app"
+    // @body : expects { "Name" : string, "ImagePath" : string }
+    router.get('/courses/create', controller.courses.Crud_createCourse);    
 
     // @http-verb : get
     // @table : Course
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
     router.get('/courses/:Course_PK', controller.courses.cRud_courseById);
 
-    // @http-verb : get
-    // @table : Course
-    // @auth : header Authorization Bearer OR Cookie "tbl_app"
-    router.get('/courses/all', controller.courses.cRud_allCourses);
-
-    // @http-verb : post
-    // @table : Course
-    // @auth : header Authorization Bearer OR Cookie "tbl_app"
-    // @body : expects { "Name" : string, "ImagePath" : string }
-    router.get('/courses/create', controller.courses.Crud_createCourse);
-
     // @http-verb : patch
     // @table : Course
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
     // @body : expects { "Name" : string, "ImagePath" : string }
-    router.patch('/courses/update/:Course_PK', controller.courses.crUd_updateCourse);
+    router.patch('/courses/:Course_PK/update', controller.courses.crUd_updateCourse);
 
     // @http-verb : get
     // @table : Module
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
     // @body : expects queryString param "Course_FK", which is the Course_FK
-    router.get('/courses/modules/:Course_FK', controller.modules.cRud_modulesByCourse);
+    router.get('/courses/:Course_PK/modules', controller.modules.cRud_modulesByCourse);
+
+    // @http-verb : get
+    // @table : Module
+    // @auth : header Authorization Bearer OR Cookie "tbl_app"
+    // @body : expects queryString param "Course_FK", which is the Course_FK
+    router.get('/courses/:Course_PK/modules/:Module_PK', controller.modules.cRud_moduleById);
 
     // @http-verb : get
     // @table : ModuleDiscussion

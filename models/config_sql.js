@@ -8,7 +8,8 @@ exports.connect = () => {
             port : process.env.DB_PORT || 3306,
             database : process.env.DB_NAME || 'ual_dw_tblproj',
             user : process.env.DB_USER || 'ual_dw_tbl_admin',
-            password : process.env.DB_PASSWORD || 'MNkE7kQ6ckrknzFB'
+            password : process.env.DB_PASSWORD || 'MNkE7kQ6ckrknzFB',
+            //debug: ['ComQueryPacket', 'RowDataPacket']
         },
         listPerPage: process.env.DB_LIST_PER_PAGE || 10,
     }

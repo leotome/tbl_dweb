@@ -19,3 +19,23 @@ exports.cRud_modulesByCourse = (params) => {
         });
     });
 }
+
+exports.cRud_moduleById = (params) => {
+    return new Promise((resolve, reject) => {
+        mysql.connect()
+        .then((conn) => {
+            conn
+            .query("SELECT Module_PK, Name, Description, Course_FK, ImagePath, Language, Parent_FK FROM Module WHERE Module_PK = ? AND Course_FK = ?", [params.Module_PK, params.Course_FK])
+            .then(([result]) => {                
+                resolve(result);
+            })
+            .catch((error) => {
+                reject(error.sqlMessage);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            reject(error);
+        });
+    });
+}
