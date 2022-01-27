@@ -20,6 +20,26 @@ exports.cRud_studentCourses = (data) => {
     });
 }
 
+exports.cRud_courseById = (data) => {
+    return new Promise((resolve, reject) => {
+        mysql.connect()
+        .then((conn) => {
+            conn
+            .query("SELECT Course_PK, Name, ImagePath FROM Course WHERE Course_PK = ?", [data.Course_PK])
+            .then(([result]) => {     
+                resolve(result);
+            })
+            .catch((error) => {
+                reject(error.sqlMessage);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            reject(error);
+        });
+    });
+}
+
 exports.cRud_allCourses = () => {
     return new Promise((resolve, reject) => {
         mysql.connect()

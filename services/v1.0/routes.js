@@ -28,6 +28,11 @@ module.exports = app => {
     // @http-verb : get
     // @table : Course
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
+    router.get('/courses/:Course_PK', controller.courses.cRud_courseById);
+
+    // @http-verb : get
+    // @table : Course
+    // @auth : header Authorization Bearer OR Cookie "tbl_app"
     router.get('/courses/all', controller.courses.cRud_allCourses);
 
     // @http-verb : post

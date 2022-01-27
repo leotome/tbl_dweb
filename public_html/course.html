@@ -42,32 +42,30 @@
                     <nav class="header__menu">
                         <ul>
                             <li><a href="./index.html">Home</a></li>
+                            <li><a href="./my.html">My Courses</a></li>
                         </ul>
                     </nav>
                 </div>
                 <div class="col-lg-3">
                     <div class="header__cart">
-                        <ul>
+                        <ul id="tbl_usermenu">
                             <li><a href="#" data-toggle="modal" data-target="#login_modal">Login</a></li>
                             <li><a href="#" data-toggle="modal" data-target="#register_modal">Register</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="humberger__open">
-                <i class="fa fa-bars"></i>
-            </div>
         </div>
     </header>
     <!-- Header Section End -->
 
     <!-- Blog Details Hero Begin -->
-    <section class="blog-details-hero set-bg" data-setbg="img/home/home-user.jpg">
+    <section class="blog-details-hero set-bg" data-setbg="" id="tbl_module_header">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="blog__details__hero__text">
-                        <h2>{0}</h2>
+                        <h2 id="tbl_course_name">{0}</h2>
                     </div>
                 </div>
             </div>
@@ -85,19 +83,11 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <!-- use to repeat courses -->
-                <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
-                    <div class="featured__item">
-                        <div class="featured__item__pic set-bg" data-setbg="img/featured/feature-1.jpg">
-                        </div>
-                        <div class="featured__item__text">
-                            <h6><a href="#">Crab Pool Security</a></h6>
-                        </div>
-                    </div>
-                </div>
-                <!-- use to repeat courses -->
+            <!-- use to repeat modules -->
+            <div class="row" id="tbl_modules_container">
+                                
             </div>
+            <!-- use to repeat modules -->
         </div>
     </section>
     <!-- Featured Section End -->
@@ -127,7 +117,11 @@
     <script src="js/mixitup.min.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/js.cookie.min.js"></script>
+    <script src="js/common.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/course.js"></script>
+    
 
 
 

@@ -18,3 +18,12 @@ function getIsAuthenticated(){
     }
     return token;
 }
+
+function getURLParameter(key){
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    if(urlParams.has(key)){
+        return urlParams.get(key);
+    }
+    return null;
+}
