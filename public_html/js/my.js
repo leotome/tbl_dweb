@@ -30,7 +30,7 @@ function doGetAssignedCourses(){
             alert('An unknown error occurred. Please contact support, or try again later.');
             return;
         }
-        let cardTemplate = '<div class="col-lg-3 col-md-4 col-sm-6"><div class="featured__item"><div class="featured__item__pic set-bg" data-setbg="{0}"></div><div class="featured__item__text"><h6><a href="course.html?id={1}">{2}</a></h6></div></div></div>';
+        let cardTemplate = '<div class="col-lg-3 col-md-4 col-sm-6"><div class="featured__item"><a href="course.html?id={1}"><div class="featured__item__pic set-bg" data-setbg="{0}"></div><div class="featured__item__text"><h6>{2}</h6></div></a></div></div>';
         let allCards = '';
         result.forEach(record => {
             allCards += cardTemplate.replace('{0}', record.ImagePath).replace('{1}', record.Course_PK).replace('{2}', record.Name);

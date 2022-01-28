@@ -7,11 +7,11 @@ exports.cRud_activitiesByModule = async (req, res) => {
         const message = { message: "You are not authorized to perform this action." };
         return res.status(400).send(message);
     }
-    if(req.params.Module_FK === null){
-        const message = { message: "Missing parameter." };
+    if(req.params.Module_PK === null){
+        const message = { message: "Missing parameter Module_PK." };
         return res.status(400).send(message);
     }
-    activities.cRud_activitiesByModule({Language : TokenData.Language, Module_FK : req.params.Module_FK})
+    activities.cRud_activitiesByModule({ Module_FK : req.params.Module_PK })
     .then(result => {
         res.status(200).send(result);
     })

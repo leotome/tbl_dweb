@@ -64,19 +64,24 @@ module.exports = app => {
     // @table : ModuleDiscussion
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
     // @body : expects queryString param "Module_FK", which is the Module_FK
-    router.get('/courses/modules/discussions/:Module_FK', controller.discussions.cRud_discussionsByModule);
+    router.get('/courses/:Course_PK/modules/:Module_PK/discussions', controller.discussions.cRud_discussionsByModule);
 
     // @http-verb : post
     // @table : ModuleDiscussion
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
-    // @body : expects queryString param "Module_FK", which is the Module_FK, and { "Module_FK" : integer, "Body" : string, "CreatedBy_FK" : integer }
-    router.post('/courses/modules/discussions/create/:Module_FK', controller.discussions.Crud_insertMessage);
+    // @body : expects queryString param "Module_FK", which is the Module_FK, and { "Module_FK" : integer, "Body" : string}
+    router.post('/courses/:Course_PK/modules/:Module_PK/discussions/create', controller.discussions.Crud_insertPost);
+
+    // @http-verb : get
+    // @table : ModuleDiscussion
+    // @auth : header Authorization Bearer OR Cookie "tbl_app"
+    router.get('/discussions/delete/:Discussion_PK', controller.discussions.cruD_deletePost);
 
     // @http-verb : get
     // @table : Activity
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
     // @body : expects queryString param "Module_FK", which is the Module_FK
-    router.get('/courses/modules/activities/:Module_FK', controller.activities.cRud_activitiesByModule);
+    router.get('/courses/:Course_PK/modules/:Module_PK/activities', controller.activities.cRud_activitiesByModule);
 
     // @http-verb : get
     // @table : Question

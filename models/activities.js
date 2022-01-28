@@ -4,14 +4,8 @@ exports.cRud_activitiesByModule = (params) => {
     return new Promise((resolve, reject) => {
         mysql.connect()
         .then((conn) => {
-            let query;
-            if(params.Language == 'en'){
-                query = "SELECT Activity_PK, Module_FK, Title, Description, ImageURL, Language, Parent_FK FROM Activity WHERE Language = ? AND Activity_PK IN (SELECT Activity_PK FROM Activity WHERE Module_FK = ?)";
-            } else {
-                query = "SELECT Activity_PK, Module_FK, Title, Description, ImageURL, Language, Parent_FK FROM Activity WHERE Language = ? AND Parent_FK IN (SELECT Activity_PK FROM Activity WHERE Module_FK = ?)";
-            }
             conn
-            .query(query, [params.Language, params.Module_FK])
+            .query("SELECT A.Activity_PK, A.Module_FK, A.Title, AT.ActivityType_PK, AT.ImagePath FROM Activity A INNER JOIN ActivityType AT ON A.Type_FK = AT.ActivityType_PK WHERE A.Module_FK = ?", [params.Module_FK])
             .then(([result]) => {
                 resolve(result);
             })
