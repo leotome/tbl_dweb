@@ -95,7 +95,8 @@ function doGetDiscussions(Course_PK, Module_PK){
             alert('An unknown error occurred. Please contact support, or try again later.');
             return;
         }
-        if(result.length){
+        let tbl_discussion_container = document.getElementById("tbl_discussion_container");
+        if(result.length > 0){
             let container_start = '<br/><table>';
             let container_item_notOwner = '<tr><td><b>{0}</b><br/><i>{1}</i></td></tr><tr><td style="padding-bottom: 15px;">{2}</td></tr>';
             let container_item_isOwner = '<tr><td><b>{0}</b><br/><i>{1}</i>&nbsp;<a onclick="doDeleteDiscussion({3})"><i class="fa fa-trash"></i></a></td></tr><tr><td style="padding-bottom: 15px;">{2}</td></tr>';
@@ -109,8 +110,10 @@ function doGetDiscussions(Course_PK, Module_PK){
                 }
             })
             allDiscussions += container_end;
-            let tbl_discussion_container = document.getElementById("tbl_discussion_container");
             tbl_discussion_container.innerHTML = allDiscussions;
+        } else {
+            let noPosts = '<br/><div class="col-lg-12 text-center"><img src="img/illustrations/empty-desert.jpg"/><p>Nothing has been discussed on this topic yet. Write the first post!</p></div><br/>';
+            tbl_discussion_container.innerHTML = noPosts;
         }
     })
     .catch(async (error) => {
