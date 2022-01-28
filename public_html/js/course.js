@@ -40,8 +40,7 @@ function doGetCourse(Course_PK){
         tbl_course_name.innerHTML = result.Name;
         let tbl_course_header = document.getElementById("tbl_course_header");
         tbl_course_header.style.background = 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(' + result.ImagePath + ')';
-
-        
+        document.title = result.Name + ' | Team-based Learning';
     })
     .catch(async (error) => {
         alert('An unknown error occurred. Please contact support, or try again later.');
