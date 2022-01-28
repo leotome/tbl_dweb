@@ -44,7 +44,7 @@ exports.register = async (req, res) => {
         const body = req.body;
         const salt = await bcrypt.genSalt();
         const hashPassword = await bcrypt.hash(body.Password, salt);
-        const record = [body.FirstName, body.LastName, body.Phone, body.Email, hashPassword];
+        const record = [body.FirstName, body.LastName, body.Phone, body.Email, hashPassword, new Date().toISOString().slice(0, 19).replace('T', ' ')];
         users.Crud_registerUser(record) // C: Create
         .then((result) => {
             var response = { message: "User created successfully!" };
@@ -66,7 +66,7 @@ exports.information = async (req, res) => {
     }
     users.cRud_usersByEmail(TokenData)
     .then((result) => {
-        return res.status(201).send(result);
+        return res.status(200).send(result);
     })
     .catch((error) => {
         res.status(400).send({message: JSON.stringify(error)});
@@ -76,4 +76,44 @@ exports.information = async (req, res) => {
 exports.logout = async (req, res) => {
     res.clearCookie('tbl_app');
     res.status(440).send({message : 'Logout successful'});
+};
+
+exports.crUd_updateUser = async (req, res) => {
+    let TokenData = utils.authenticateToken(req);
+    if(TokenData === null){
+        const message = { message: "You are not authorized to perform this action." };
+        return res.status(400).send(message);
+    }
+    if (!req.body) {
+        const message = { message: "Body cannot be empty." };
+        return res.status(400).send(message);
+    }
+    if(req.body.User_PK != null){
+        users.crUd_updateUser(req.body)
+        .then((result) => {
+            return res.status(200).send(result);
+        })
+        .catch((error) => {
+            res.status(400).send({message: JSON.stringify(error)});
+        });
+    } else {
+        users.cRud_usersByEmail(TokenData)
+        .then((result) => {
+            if(result[0].Email != req.body.Email){
+                const message = { message: "You are not authorized to perform this action." };
+                return res.status(400).send(message);
+            } else {
+                users.crUd_updateUser({ User_PK : result[0].User_PK, FirstName : req.body.FirstName, LastName : req.body.LastName, Phone : req.body.Phone })
+                .then((result) => {
+                    return res.status(200).send(result);
+                })
+                .catch((error) => {
+                    res.status(400).send({message: JSON.stringify(error)});
+                });
+            }
+        })
+        .catch((error) => {
+            res.status(400).send({message: JSON.stringify(error)});
+        });
+    }
 };

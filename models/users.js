@@ -26,8 +26,28 @@ exports.Crud_registerUser = (params) => {
         mysql.connect()
         .then((conn) => {
             conn
-            .execute("INSERT INTO User (FirstName, LastName, Phone, Email, Password, Type_FK) VALUES (?, ?, ?, ?, ?, '1')", params)
+            .execute("INSERT INTO User (FirstName, LastName, Phone, Email, Password, Type_FK, LastModifiedDate) VALUES (?, ?, ?, ?, ?, '1', ?)", params)
             .then(([result]) => {                
+                resolve(result);
+            })
+            .catch((error) => {
+                reject(error.sqlMessage);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            reject(error);
+        });
+    });
+}
+
+exports.crUd_updateUser = (params) => {
+    return new Promise((resolve, reject) => {
+        mysql.connect()
+        .then((conn) => {
+            conn
+            .execute("UPDATE User SET FirstName = ?, LastName = ?, Phone = ?, LastModifiedDate = ? WHERE User_PK = ?", [params.FirstName, params.LastName, params.Phone, new Date().toISOString().slice(0, 19).replace('T', ' '), params.User_PK])
+            .then(([result]) => {
                 resolve(result);
             })
             .catch((error) => {

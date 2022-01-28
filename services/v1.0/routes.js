@@ -20,6 +20,11 @@ module.exports = app => {
     // @table : User
     router.get('/users/logout', controller.users.logout);
 
+    // @http-verb : post
+    // @table : User
+    // @body : expects { "FirstName" : string, "LastName" : string, "Phone" : string }
+    router.post('/users/update', controller.users.crUd_updateUser);
+
     // @http-verb : get
     // @table : Course
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
