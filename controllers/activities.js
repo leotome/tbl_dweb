@@ -149,7 +149,13 @@ exports.Crud_submitActivity = async (req, res) => {
         })
         activities.Crud_activitySubmit(ActivityDoneStudent, ActivityAnswersStudent)
         .then(insert_result => {
-            return res.status(200).send({ message : "The activity was successfully submitted!" });
+            activities.cRud_activitiesById({ Activity_PK : req.params.Activity_PK })
+            .then(actv_result => {
+                return res.status(200).send({ message : "The activity was successfully submitted!", activity : actv_result [0] });
+            })
+            .catch(error => {
+                return res.status(401).send({message: JSON.stringify(error)});
+            })
         })
         .catch(error => {
             return res.status(401).send({message: JSON.stringify(error)});

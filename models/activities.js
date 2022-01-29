@@ -26,9 +26,9 @@ exports.cRud_activitiesById = (params) => {
         .then((conn) => {
             let query = '';
             if(params.Student_FK){
-                query = `SELECT A.Activity_PK, A.Module_FK, A.Title, A.Type_FK, AT.ImagePath, A.Description, A.Group_ParentActivity_FK, AD.ActivityDoneStudent_PK, AD.IsCompleted, AD.TotalScore FROM Activity A INNER JOIN ActivityType AT ON A.Type_FK = AT.ActivityType_PK LEFT JOIN ActivityDoneStudent AD ON A.Activity_PK = AD.Activity_FK WHERE A.Activity_PK = ${params.Activity_PK} AND AD.Student_FK = ${params.Student_FK}`;
+                query = `SELECT A.Activity_PK, A.Module_FK, M.Course_FK, A.Title, A.Type_FK, AT.ImagePath, A.Description, A.Group_ParentActivity_FK, AD.ActivityDoneStudent_PK, AD.IsCompleted, AD.TotalScore FROM Activity A INNER JOIN ActivityType AT ON A.Type_FK = AT.ActivityType_PK INNER JOIN Module M ON A.Module_FK = M.Module_PK LEFT JOIN ActivityDoneStudent AD ON A.Activity_PK = AD.Activity_FK WHERE A.Activity_PK = ${params.Activity_PK} AND AD.Student_FK = ${params.Student_FK}`;
             } else {
-                query = `SELECT A.Activity_PK, A.Module_FK, A.Title, A.Type_FK, AT.ImagePath, A.Description, A.Group_ParentActivity_FK, AD.ActivityDoneStudent_PK, AD.IsCompleted, AD.TotalScore FROM Activity A INNER JOIN ActivityType AT ON A.Type_FK = AT.ActivityType_PK LEFT JOIN ActivityDoneStudent AD ON A.Activity_PK = AD.Activity_FK WHERE A.Activity_PK = ${params.Activity_PK}`;
+                query = `SELECT A.Activity_PK, A.Module_FK, M.Course_FK, A.Title, A.Type_FK, AT.ImagePath, A.Description, A.Group_ParentActivity_FK, AD.ActivityDoneStudent_PK, AD.IsCompleted, AD.TotalScore FROM Activity A INNER JOIN ActivityType AT ON A.Type_FK = AT.ActivityType_PK INNER JOIN Module M ON A.Module_FK = M.Module_PK LEFT JOIN ActivityDoneStudent AD ON A.Activity_PK = AD.Activity_FK WHERE A.Activity_PK = ${params.Activity_PK}`;
             }
             conn
             .query(query)

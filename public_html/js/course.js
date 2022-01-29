@@ -30,12 +30,13 @@ function doGetCourse(Course_PK){
         var success = response.ok;
         if(result.message && success == false){
             alert(result.message);
+            let returnUrl = getBaseURI() + `my.html`;
+            window.open(returnUrl, "_self");
             return;
         } else if(success == false){
             alert('An unknown error occurred. Please contact support, or try again later.');
             return;
         }
-
         let tbl_course_name = document.getElementById("tbl_course_name");       
         tbl_course_name.innerHTML = result.Name;
         let tbl_course_header = document.getElementById("tbl_course_header");
