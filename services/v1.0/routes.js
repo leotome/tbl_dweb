@@ -98,19 +98,25 @@ module.exports = app => {
     // @table : Activity
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
     // @body : expects queryString param "Activity_PK", which is the Activity_PK
-    router.get('/activities/:Activity_PK/countStudentsAll', controller.activities.cRud_noStudentsActivity);
+    router.get('/activities/:Activity_PK/countStudentsAll', controller.activities.cRud_numberOfStudentsActivity);
 
     // @http-verb : get
     // @table : Activity
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
     // @body : expects queryString param "Activity_PK", which is the Activity_PK
-    router.get('/activities/:Activity_PK/countStudentsFinished', controller.activities.cRud_noStudentsFinishedActivity);
+    router.get('/activities/:Activity_PK/countStudentsFinished', controller.activities.cRud_numberOfStudentsFinishedActivity);
 
     // @http-verb : get
     // @table : Question
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
     // @body : expects queryString param "Activity_PK", which is the Activity_PK
     router.get('/activities/questions/:Activity_PK', controller.activities.cRud_questionsByActivity);
+
+    // @http-verb : post
+    // @table : ActivityDoneStudent
+    // @auth : header Authorization Bearer OR Cookie "tbl_app"
+    // @body : expects array of { Question_PK : integer, UserChoice : string }
+    router.post('/activities/:Activity_PK/submit', controller.activities.Crud_submitActivity);
 
     app.use('/services/v1.0', router);
 }

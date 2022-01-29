@@ -46,7 +46,7 @@ exports.cRud_activitiesById = (params) => {
     });
 }
 
-exports.cRud_noStudentsActivity = (params) => {
+exports.cRud_numberOfStudentsActivity = (params) => {
     return new Promise((resolve, reject) => {
         mysql.connect()
         .then((conn) => {
@@ -72,7 +72,7 @@ exports.cRud_noStudentsActivity = (params) => {
     });
 }
 
-exports.cRud_noStudentsFinishedActivity = (params) => {
+exports.cRud_numberOfStudentsFinishedActivity = (params) => {
     return new Promise((resolve, reject) => {
         mysql.connect()
         .then((conn) => {
@@ -106,6 +106,33 @@ exports.cRud_questionsByActivity = (params) => {
             .execute("SELECT Q.Question_PK, Q.Statement, Q.Answer1_Text, Q.Answer1_Score, Q.Answer2_Text, Q.Answer2_Score, Q.Answer3_Text, Q.Answer3_Score, Q.Answer4_Text, Q.Answer4_Score, Q.Answer5_Text, Q.Answer5_Score FROM Question Q WHERE Q.Question_PK IN (SELECT Question_FK FROM ActivityQuestion WHERE Activity_FK = ?)", [params.Activity_PK])
             .then(([result]) => {                
                 resolve(result);
+            })
+            .catch((error) => {
+                reject(error.sqlMessage);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            reject(error);
+        });
+    });
+}
+
+exports.Crud_activitySubmit = (ActivityDoneStudent, ActivityAnswersStudent) => {
+    return new Promise((resolve, reject) => {
+        mysql.connect()
+        .then((conn) => {
+            conn
+            .query("INSERT INTO ActivityDoneStudent (Activity_FK, Student_FK, IsCompleted, TotalScore) VALUES (?, ?, ?, ?)", [ActivityDoneStudent.Activity_FK, ActivityDoneStudent.Student_FK, ActivityDoneStudent.IsCompleted, ActivityDoneStudent.TotalScore])
+            .then(([result_ActivityDoneStudent]) => {
+                conn
+                .query("INSERT INTO ActivityAnswerStudent (Activity_FK, Student_FK, Question_FK, Answer, Score) VALUES ?", [ActivityAnswersStudent.map(item => [item.Activity_FK, item.Student_FK, item.Question_FK, item.Answer, item.Score])])
+                .then(([result_ActivityAnswerStudent]) => {
+                    resolve([result_ActivityDoneStudent, result_ActivityAnswerStudent]);
+                })
+                .catch((error) => {
+                    reject(error.sqlMessage);
+                });
             })
             .catch((error) => {
                 reject(error.sqlMessage);
