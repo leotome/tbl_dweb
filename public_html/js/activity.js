@@ -49,7 +49,7 @@ function doGetActivity(Activity_PK){
         if(result[0].ActivityDoneStudent_PK != null && result[0].Type_FK == 1){
             alert('You have already submitted this activity.');
             Global_AllowLeaveBrowser = true;
-            let returnUrl = getBaseURI() + `/module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
+            let returnUrl = getBaseURI() + `module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
             window.open(returnUrl, "_self");
         } else if(result[0].ActivityDoneStudent_PK != null && result[0].Type_FK == 2) {
             alert('This activity has already been submitted by a member of your group.');
