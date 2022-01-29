@@ -50,40 +50,8 @@ exports.cRud_numberOfStudentsActivity = (params) => {
     return new Promise((resolve, reject) => {
         mysql.connect()
         .then((conn) => {
-            let query = '';
-            if(params.Activity_PK){
-                query = `SELECT A.Activity_PK, COUNT(CG.Student_FK) AS No_Students FROM CourseGroup CG INNER JOIN Module M ON CG.Course_FK = M.Course_FK INNER JOIN Activity A ON M.Module_PK = A.Module_FK WHERE Activity_PK = ${params.Activity_PK} GROUP BY A.Activity_PK`;
-            } else {
-                query = `SELECT A.Activity_PK, COUNT(CG.Student_FK) AS No_Students FROM CourseGroup CG INNER JOIN Module M ON CG.Course_FK = M.Course_FK INNER JOIN Activity A ON M.Module_PK = A.Module_FK GROUP BY A.Activity_PK`;
-            }
             conn
-            .query(query)
-            .then(([result]) => {
-                resolve(result);
-            })
-            .catch((error) => {
-                reject(error.sqlMessage);
-            });
-        })
-        .catch((error) => {
-            console.log(error);
-            reject(error);
-        });
-    });
-}
-
-exports.cRud_numberOfStudentsFinishedActivity = (params) => {
-    return new Promise((resolve, reject) => {
-        mysql.connect()
-        .then((conn) => {
-            let query = '';
-            if(params.Activity_PK){
-                query = `SELECT Activity_FK, COUNT(Student_FK) AS No_Students FROM ActivityDoneStudent WHERE Activity_FK = ${params.Activity_PK} GROUP BY Activity_FK`;
-            } else {
-                query = `SELECT Activity_FK, COUNT(Student_FK) AS No_Students FROM ActivityDoneStudent GROUP BY Activity_FK`;
-            }
-            conn
-            .query(query)
+            .query("SELECT 'AllStudents' AS Type, COUNT(CG.Student_FK) AS No_Students FROM CourseGroup CG INNER JOIN Module M ON CG.Course_FK = M.Course_FK INNER JOIN Activity A ON M.Module_PK = A.Module_FK WHERE Activity_PK = ? UNION SELECT 'StudentsFinishedActivity' AS Type, COUNT(Student_FK) AS No_Students FROM ActivityDoneStudent WHERE Activity_FK = ?", [params.Activity_PK, params.Activity_PK])
             .then(([result]) => {
                 resolve(result);
             })

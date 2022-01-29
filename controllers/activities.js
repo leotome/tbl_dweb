@@ -39,25 +39,6 @@ exports.cRud_numberOfStudentsActivity = async (req, res) => {
     })
 }
 
-exports.cRud_numberOfStudentsFinishedActivity = async (req, res) => {
-    let TokenData = utils.authenticateToken(req);
-    if(TokenData === null){
-        const message = { message: "You are not authorized to perform this action." };
-        return res.status(400).send(message);
-    }
-    let params = {};
-    if(req.params.Activity_PK != null){
-        params["Activity_PK"] = req.params.Activity_PK
-    }
-    activities.cRud_numberOfStudentsFinishedActivity(params)
-    .then(result => {
-        return res.status(200).send(result);
-    })
-    .catch(error => {
-        return res.status(401).send({message: JSON.stringify(error)});
-    })
-}
-
 exports.cRud_activitiesByModule = async (req, res) => {
     let TokenData = utils.authenticateToken(req);
     if(TokenData === null){

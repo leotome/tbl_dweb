@@ -98,13 +98,7 @@ module.exports = app => {
     // @table : Activity
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
     // @body : expects queryString param "Activity_PK", which is the Activity_PK
-    router.get('/activities/:Activity_PK/countStudentsAll', controller.activities.cRud_numberOfStudentsActivity);
-
-    // @http-verb : get
-    // @table : Activity
-    // @auth : header Authorization Bearer OR Cookie "tbl_app"
-    // @body : expects queryString param "Activity_PK", which is the Activity_PK
-    router.get('/activities/:Activity_PK/countStudentsFinished', controller.activities.cRud_numberOfStudentsFinishedActivity);
+    router.get('/activities/:Activity_PK/countStudents', controller.activities.cRud_numberOfStudentsActivity);
 
     // @http-verb : get
     // @table : Question

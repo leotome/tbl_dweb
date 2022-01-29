@@ -59,33 +59,23 @@ function doGetActivity(Activity_PK){
             window.open(returnUrl, "_self");
             return;
         } else if(result[0].ActivityDoneStudent_PK == null && result[0].Type_FK == 2) {
-            let activity_countStudentsAll_request_url = getAPIURI() + `activities/${result[0].Group_ParentActivity_FK}/countStudentsAll`;
-            let activity_countStudentsFinished_request_url = getAPIURI() + `activities/${result[0].Group_ParentActivity_FK}/countStudentsFinished`;
-            fetch(activity_countStudentsAll_request_url)
-            .then(async (countAll) => {
-                var result_countAll = await countAll.json();
-                fetch(activity_countStudentsFinished_request_url)
-                .then(async (countFinished) => {
-                    var result_countFinished = await countFinished.json();
-                    let flat_result_countAll_No_Students = (result_countAll.length > 0) ? result_countAll[0].No_Students : 0;
-                    let flat_result_countFinished_No_Students = (result_countFinished.length > 0) ? result_countAll[0].No_Students : -1;
-                    if(flat_result_countAll_No_Students > flat_result_countFinished_No_Students){
-                        alert('The individual activity related to this activity has not yet been completed by all members of your group, and therefore is not yet available. Please try again later.');
-                        Global_AllowLeaveBrowser = true;
-                        let returnUrl = getBaseURI() + `module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
-                        window.open(returnUrl, "_self");
-                        return;
-                    }
-                })
-                .catch(async (error) => {
-                    console.log('activity_countStudentsFinished_request_url', JSON.stringify(error));
-                    alert('An unknown error occurred. Please contact support, or try again later.');
-                })                
+            let activity_countStudents_request_url = getAPIURI() + `/activities/${result[0].Group_ParentActivity_FK}/countStudents`;
+            fetch(activity_countStudents_request_url)
+            .then(async (countStudents_response) => {
+                var countStudents_result = await countStudents_response.json();
+                let flat_result_countAll_No_Students = countStudents_result.find(({Type}) => Type == 'AllStudents').No_Students;
+                let flat_result_countFinished_No_Students = countStudents_result.find(({Type}) => Type == 'StudentsFinishedActivity').No_Students;
+                if(flat_result_countAll_No_Students > flat_result_countFinished_No_Students){
+                    alert('The individual activity related to this activity has not yet been completed by all members of your group, and therefore is not yet available. Please try again later.');
+                    Global_AllowLeaveBrowser = true;
+                    let returnUrl = getBaseURI() + `module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
+                    window.open(returnUrl, "_self");
+                    return;
+                }
             })
             .catch(async (error) => {
-                console.log('activity_countStudentsAll_request_url', JSON.stringify(error));
                 alert('An unknown error occurred. Please contact support, or try again later.');
-
+                console.log(JSON.stringify(error));
             })
         }
 
