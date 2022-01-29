@@ -26,9 +26,9 @@ exports.cRud_activitiesById = (params) => {
         .then((conn) => {
             let query = '';
             if(params.Student_FK){
-                query = `SELECT A.Activity_PK, A.Module_FK, A.Title, A.Type_FK, A.Description, A.Group_ParentActivity_FK, AD.ActivityDoneStudent_PK, AD.IsCompleted, AD.TotalScore FROM Activity A LEFT JOIN ActivityDoneStudent AD ON A.Activity_PK = AD.Activity_FK WHERE A.Activity_PK = ${params.Activity_PK} AND AD.Student_FK = ${params.Student_FK}`;
+                query = `SELECT A.Activity_PK, A.Module_FK, A.Title, A.Type_FK, AT.ImagePath, A.Description, A.Group_ParentActivity_FK, AD.ActivityDoneStudent_PK, AD.IsCompleted, AD.TotalScore FROM Activity A INNER JOIN ActivityType AT ON A.Type_FK = AT.ActivityType_PK LEFT JOIN ActivityDoneStudent AD ON A.Activity_PK = AD.Activity_FK WHERE A.Activity_PK = ${params.Activity_PK} AND AD.Student_FK = ${params.Student_FK}`;
             } else {
-                query = `SELECT A.Activity_PK, A.Module_FK, A.Title, A.Type_FK, A.Description, A.Group_ParentActivity_FK, AD.ActivityDoneStudent_PK, AD.IsCompleted, AD.TotalScore FROM Activity A LEFT JOIN ActivityDoneStudent AD ON A.Activity_PK = AD.Activity_FK WHERE A.Activity_PK = ${params.Activity_PK}`;
+                query = `SELECT A.Activity_PK, A.Module_FK, A.Title, A.Type_FK, AT.ImagePath, A.Description, A.Group_ParentActivity_FK, AD.ActivityDoneStudent_PK, AD.IsCompleted, AD.TotalScore FROM Activity A INNER JOIN ActivityType AT ON A.Type_FK = AT.ActivityType_PK LEFT JOIN ActivityDoneStudent AD ON A.Activity_PK = AD.Activity_FK WHERE A.Activity_PK = ${params.Activity_PK}`;
             }
             conn
             .query(query)
@@ -103,7 +103,7 @@ exports.cRud_questionsByActivity = (params) => {
         mysql.connect()
         .then((conn) => {
             conn
-            .execute("SELECT A.Activity_PK, A.Title, Q.Question_PK, Q.Statement, Q.Answer1_Text, Q.Answer1_Score, Q.Answer2_Text, Q.Answer2_Score, Q.Answer3_Text, Q.Answer3_Score, Q.Answer4_Text, Q.Answer4_Score, Q.Answer5_Text, Q.Answer5_Score FROM ActivityQuestion ActQ INNER JOIN Activity A ON ActQ.Activity_FK = A.Activity_PK INNER JOIN Question Q ON ActQ.Question_FK = Q.Question_PK WHERE A.Activity_PK = ?", [params])
+            .execute("SELECT Q.Question_PK, Q.Statement, Q.Answer1_Text, Q.Answer1_Score, Q.Answer2_Text, Q.Answer2_Score, Q.Answer3_Text, Q.Answer3_Score, Q.Answer4_Text, Q.Answer4_Score, Q.Answer5_Text, Q.Answer5_Score FROM Question Q WHERE Q.Question_PK IN (SELECT Question_FK FROM ActivityQuestion WHERE Activity_FK = ?)", [params.Activity_PK])
             .then(([result]) => {                
                 resolve(result);
             })

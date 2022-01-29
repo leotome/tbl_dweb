@@ -83,7 +83,11 @@ exports.cRud_questionsByActivity = async (req, res) => {
         const message = { message: "You are not authorized to perform this action." };
         return res.status(400).send(message);
     }
-    activities.cRud_questionsByActivity(req.params.id)
+    if(req.params.Activity_PK === null){
+        const message = { message: "Missing parameter Activity_PK." };
+        return res.status(400).send(message);
+    }    
+    activities.cRud_questionsByActivity({Activity_PK : req.params.Activity_PK})
     .then(result => {
         res.status(200).send(result);
     })

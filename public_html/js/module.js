@@ -209,6 +209,7 @@ function doGetActivity(Activity_PK){
         let tbl_modal_activity_footer_start = document.getElementById("tbl_modal_activity_footer_start");
         let tbl_modal_activity_panel = document.getElementById("tbl_modal_activity_panel");
         tbl_modal_activity_footer_start.disabled = false;
+        tbl_modal_activity_footer_start.setAttribute("onclick",`doStartActivity(${Activity_PK})`);
         tbl_modal_activity_panel.innerHTML = null;
         if(result[0].ActivityDoneStudent_PK != null && result[0].Type_FK == 1){
             tbl_modal_activity_footer_start.disabled = true;            
@@ -247,4 +248,9 @@ function doGetActivity(Activity_PK){
         alert('An unknown error occurred. Please contact support, or try again later.');
         console.log(JSON.stringify(error));
     })
+}
+
+function doStartActivity(Activity_PK){
+    let pageURL = getBaseURI() + 'activity.html?activity=' + Activity_PK;
+    window.open(pageURL, '_blank');
 }
