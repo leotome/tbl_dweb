@@ -24,7 +24,7 @@
 
 
 function doGetActivity(Activity_PK){
-    let request_url = getAPIURI() + `/activities/${Activity_PK}`;
+    let request_url = getAPIURI() + `activities/${Activity_PK}`;
     fetch(request_url)
     .then(async (response) => {
         var result = await response.json();
@@ -48,15 +48,17 @@ function doGetActivity(Activity_PK){
 
         if(result[0].ActivityDoneStudent_PK != null && result[0].Type_FK == 1){
             alert('You have already submitted this activity.');
+            Global_AllowLeaveBrowser = true;
             let returnUrl = getBaseURI() + `/module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
             window.open(returnUrl, "_self");
         } else if(result[0].ActivityDoneStudent_PK != null && result[0].Type_FK == 2) {
             alert('This activity has already been submitted by a member of your group.');
-            let returnUrl = getBaseURI() + `/module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
+            Global_AllowLeaveBrowser = true;
+            let returnUrl = getBaseURI() + `module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
             window.open(returnUrl, "_self");
         } else if(result[0].ActivityDoneStudent_PK == null && result[0].Type_FK == 2) {
-            let activity_countStudentsAll_request_url = getAPIURI() + `/activities/${result[0].Group_ParentActivity_FK}/countStudentsAll`;
-            let activity_countStudentsFinished_request_url = getAPIURI() + `/activities/${result[0].Group_ParentActivity_FK}/countStudentsFinished`;
+            let activity_countStudentsAll_request_url = getAPIURI() + `activities/${result[0].Group_ParentActivity_FK}/countStudentsAll`;
+            let activity_countStudentsFinished_request_url = getAPIURI() + `activities/${result[0].Group_ParentActivity_FK}/countStudentsFinished`;
             fetch(activity_countStudentsAll_request_url)
             .then(async (countAll) => {
                 var result_countAll = await countAll.json();
@@ -67,30 +69,33 @@ function doGetActivity(Activity_PK){
                     let flat_result_countFinished_No_Students = (result_countFinished.length > 0) ? result_countAll[0].No_Students : -1;
                     if(flat_result_countAll_No_Students > flat_result_countFinished_No_Students){
                         alert('The individual activity related to this activity has not yet been completed by all members of your group, and therefore is not yet available. Please try again later.');
-                        let returnUrl = getBaseURI() + `/module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
+                        Global_AllowLeaveBrowser = true;
+                        let returnUrl = getBaseURI() + `module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
                         window.open(returnUrl, "_self");
                     }
                 })
                 .catch(async (error) => {
-                    alert('An unknown error occurred. Please contact support, or try again later.');
                     console.log(JSON.stringify(error));
+                    alert('An unknown error occurred. Please contact support, or try again later.');
                 })                
             })
             .catch(async (error) => {
-                alert('An unknown error occurred. Please contact support, or try again later.');
                 console.log(JSON.stringify(error));
+                alert('An unknown error occurred. Please contact support, or try again later.');
+
             })
         }
 
-        let course_request_url = this.getAPIURI() + 'courses/' + result[0].Course_FK;
+        let course_request_url = getAPIURI() + 'courses/' + result[0].Course_FK;
         fetch(course_request_url)
-        .then(async (response) => {
-            var result = await response.json();
-            console.log(result)
-            var success = response.ok;
-            if(result.message && success == false){
-                alert(result.message);
-                let returnUrl = getBaseURI() + `/module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
+        .then(async (response_c) => {
+            var result_c = await response_c.json();
+            console.log(result_c)
+            var success = response_c.ok;
+            if(result_c.message && success == false){
+                alert(result_c.message);
+                Global_AllowLeaveBrowser = true;
+                let returnUrl = getBaseURI() + `module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
                 window.open(returnUrl, "_self");
                 return;
             } else if(success == false){
@@ -99,13 +104,13 @@ function doGetActivity(Activity_PK){
             }
         })
         .catch(async (error) => {
-            alert('An unknown error occurred. Please contact support, or try again later.');
             console.log(JSON.stringify(error));
+            alert('An unknown error occurred. Please contact support, or try again later.');
         })
     })
     .catch(async (error) => {
-        alert('An unknown error occurred. Please contact support, or try again later.');
         console.log(JSON.stringify(error));
+        alert('An unknown error occurred. Please contact support, or try again later.');
     })
 }
 
@@ -113,7 +118,7 @@ let Global_UserChoices = [];
 let Global_AllowLeaveBrowser = false;
 
 function doGetQuestions(Activity_PK){
-    let request_url = getAPIURI() + `/activities/questions/${Activity_PK}`;
+    let request_url = getAPIURI() + `activities/questions/${Activity_PK}`;
     fetch(request_url)
     .then(async (response) => {
         var result = await response.json();
@@ -211,7 +216,7 @@ function doSubmitActivity(){
                 return;
             }
             alert(result.message);
-            let returnUrl = getBaseURI() + `/module.html?course=${result.activity.Course_FK}&module=${result.activity.Module_FK}`;
+            let returnUrl = getBaseURI() + `module.html?course=${result.activity.Course_FK}&module=${result.activity.Module_FK}`;
             window.open(returnUrl, "_self");
         })
         .catch(async (error) => {
