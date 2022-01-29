@@ -51,11 +51,13 @@ function doGetActivity(Activity_PK){
             Global_AllowLeaveBrowser = true;
             let returnUrl = getBaseURI() + `module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
             window.open(returnUrl, "_self");
+            return;
         } else if(result[0].ActivityDoneStudent_PK != null && result[0].Type_FK == 2) {
             alert('This activity has already been submitted by a member of your group.');
             Global_AllowLeaveBrowser = true;
             let returnUrl = getBaseURI() + `module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
             window.open(returnUrl, "_self");
+            return;
         } else if(result[0].ActivityDoneStudent_PK == null && result[0].Type_FK == 2) {
             let activity_countStudentsAll_request_url = getAPIURI() + `activities/${result[0].Group_ParentActivity_FK}/countStudentsAll`;
             let activity_countStudentsFinished_request_url = getAPIURI() + `activities/${result[0].Group_ParentActivity_FK}/countStudentsFinished`;
@@ -72,15 +74,16 @@ function doGetActivity(Activity_PK){
                         Global_AllowLeaveBrowser = true;
                         let returnUrl = getBaseURI() + `module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
                         window.open(returnUrl, "_self");
+                        return;
                     }
                 })
                 .catch(async (error) => {
-                    console.log(JSON.stringify(error));
+                    console.log('activity_countStudentsFinished_request_url', JSON.stringify(error));
                     alert('An unknown error occurred. Please contact support, or try again later.');
                 })                
             })
             .catch(async (error) => {
-                console.log(JSON.stringify(error));
+                console.log('activity_countStudentsAll_request_url', JSON.stringify(error));
                 alert('An unknown error occurred. Please contact support, or try again later.');
 
             })
@@ -98,18 +101,15 @@ function doGetActivity(Activity_PK){
                 let returnUrl = getBaseURI() + `module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
                 window.open(returnUrl, "_self");
                 return;
-            } else if(success == false){
-                alert('An unknown error occurred. Please contact support, or try again later.');
-                return;
             }
         })
-        .catch(async (error) => {
-            console.log(JSON.stringify(error));
+        .catch(async (error_c) => {
+            console.log('course_request_url',JSON.stringify(error_c));
             alert('An unknown error occurred. Please contact support, or try again later.');
         })
     })
     .catch(async (error) => {
-        console.log(JSON.stringify(error));
+        console.log('', JSON.stringify(error));
         alert('An unknown error occurred. Please contact support, or try again later.');
     })
 }
