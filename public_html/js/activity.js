@@ -44,7 +44,7 @@ function doGetActivity(Activity_PK){
         tbl_activity_header.style.background = 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(' + result[0].ImagePath + ')';
         document.title = result[0].Title + ' | Team-based Learning';
 
-        let AccessDenied = false;
+        // A little bit like spaghetti code, but we don't have time for better solutions 
 
         if(result[0].ActivityDoneStudent_PK != null && result[0].Type_FK == 1){
             alert('You have already submitted this activity.');
