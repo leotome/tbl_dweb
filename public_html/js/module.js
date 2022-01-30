@@ -201,24 +201,28 @@ function doGetActivity(Activity_PK){
             alert('An unknown error occurred. Please contact support, or try again later.');
             return;
         }
+
+        let Activity = result.Activity;
+        let ActivityDoneStudent = result.ActivityDoneStudent;
+
         let tbl_modal_activity_header = document.getElementById("tbl_modal_activity_header");
-        tbl_modal_activity_header.innerHTML = result[0].Title;
+        tbl_modal_activity_header.innerHTML = Activity[0].Title;
         let tbl_modal_activity_body = document.getElementById("tbl_modal_activity_body");
-        tbl_modal_activity_body.innerHTML = result[0].Description.replace(/\r\n/g, "<br/>");
+        tbl_modal_activity_body.innerHTML = Activity[0].Description.replace(/\r\n/g, "<br/>");
 
         let tbl_modal_activity_footer_start = document.getElementById("tbl_modal_activity_footer_start");
         let tbl_modal_activity_panel = document.getElementById("tbl_modal_activity_panel");
         tbl_modal_activity_footer_start.disabled = false;
         tbl_modal_activity_footer_start.setAttribute("onclick",`doStartActivity(${Activity_PK})`);
         tbl_modal_activity_panel.innerHTML = null;
-        if(result[0].ActivityDoneStudent_PK != null && result[0].Type_FK == 1){
+        if(ActivityDoneStudent.length > 0 && Activity[0].Type_FK == 1){
             tbl_modal_activity_footer_start.disabled = true;            
             tbl_modal_activity_panel.innerHTML = '<br/><p><b>You have already submitted this activity.</b></p>';
-        } else if(result[0].ActivityDoneStudent_PK != null && result[0].Type_FK == 2) {
+        } else if(ActivityDoneStudent.length > 0 && Activity[0].Type_FK == 2) {
             tbl_modal_activity_footer_start.disabled = true;            
             tbl_modal_activity_panel.innerHTML = '<br/><p><b>This activity has already been submitted by a member of your group.</b></p>';
-        } else if(result[0].ActivityDoneStudent_PK == null && result[0].Type_FK == 2) {
-            let activity_countStudents_request_url = getAPIURI() + `/activities/${result[0].Group_ParentActivity_FK}/countStudents`;
+        } else if(ActivityDoneStudent.length == 0 && Activity[0].Type_FK == 2) {
+            let activity_countStudents_request_url = getAPIURI() + `/activities/${Activity[0].Group_ParentActivity_FK}/countStudents`;
             fetch(activity_countStudents_request_url)
             .then(async (countStudents_response) => {
                 var countStudents_result = await countStudents_response.json();

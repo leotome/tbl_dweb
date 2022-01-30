@@ -36,30 +36,35 @@ function doGetActivity(Activity_PK){
             alert('An unknown error occurred. Please contact support, or try again later.');
             return;
         }
+
+        let Activity = result.Activity;
+        let ActivityDoneStudent = result.ActivityDoneStudent;
+
+
         let tbl_activity_name = document.getElementById("tbl_activity_name");
-        tbl_activity_name.innerHTML = result[0].Title;
+        tbl_activity_name.innerHTML = Activity[0].Title;
         let tbl_activity_description = document.getElementById("tbl_activity_description");
-        tbl_activity_description.innerHTML = result[0].Description;
+        tbl_activity_description.innerHTML = Activity[0].Description;
         let tbl_activity_header = document.getElementById("tbl_activity_header");
-        tbl_activity_header.style.background = 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(' + result[0].ImagePath + ')';
-        document.title = result[0].Title + ' | Team-based Learning';
+        tbl_activity_header.style.background = 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(' + Activity[0].ImagePath + ')';
+        document.title = Activity[0].Title + ' | Team-based Learning';
 
         // A little bit like spaghetti code, but we don't have time for better solutions 
 
-        if(result[0].ActivityDoneStudent_PK != null && result[0].Type_FK == 1){
+        if(ActivityDoneStudent.length > 0 && Activity[0].Type_FK == 1){
             alert('You have already submitted this activity.');
             Global_AllowLeaveBrowser = true;
-            let returnUrl = getBaseURI() + `module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
+            let returnUrl = getBaseURI() + `module.html?course=${Activity[0].Course_FK}&module=${Activity[0].Module_FK}`;
             window.open(returnUrl, "_self");
             return;
-        } else if(result[0].ActivityDoneStudent_PK != null && result[0].Type_FK == 2) {
+        } else if(ActivityDoneStudent.length > 0 && Activity[0].Type_FK == 2) {
             alert('This activity has already been submitted by a member of your group.');
             Global_AllowLeaveBrowser = true;
-            let returnUrl = getBaseURI() + `module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
+            let returnUrl = getBaseURI() + `module.html?course=${Activity[0].Course_FK}&module=${Activity[0].Module_FK}`;
             window.open(returnUrl, "_self");
             return;
-        } else if(result[0].ActivityDoneStudent_PK == null && result[0].Type_FK == 2) {
-            let activity_countStudents_request_url = getAPIURI() + `/activities/${result[0].Group_ParentActivity_FK}/countStudents`;
+        } else if(ActivityDoneStudent.length == 0 && Activity[0].Type_FK == 2) {
+            let activity_countStudents_request_url = getAPIURI() + `/activities/${Activity[0].Group_ParentActivity_FK}/countStudents`;
             fetch(activity_countStudents_request_url)
             .then(async (countStudents_response) => {
                 var countStudents_result = await countStudents_response.json();
@@ -68,7 +73,7 @@ function doGetActivity(Activity_PK){
                 if(flat_result_countAll_No_Students > flat_result_countFinished_No_Students){
                     alert('The individual activity related to this activity has not yet been completed by all members of your group, and therefore is not yet available. Please try again later.');
                     Global_AllowLeaveBrowser = true;
-                    let returnUrl = getBaseURI() + `module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
+                    let returnUrl = getBaseURI() + `module.html?course=${Activity[0].Course_FK}&module=${Activity[0].Module_FK}`;
                     window.open(returnUrl, "_self");
                     return;
                 }
@@ -79,7 +84,7 @@ function doGetActivity(Activity_PK){
             })
         }
 
-        let course_request_url = getAPIURI() + 'courses/' + result[0].Course_FK;
+        let course_request_url = getAPIURI() + 'courses/' + Activity[0].Course_FK;
         fetch(course_request_url)
         .then(async (response_c) => {
             var result_c = await response_c.json();
@@ -88,7 +93,7 @@ function doGetActivity(Activity_PK){
             if(result_c.message && success == false){
                 alert(result_c.message);
                 Global_AllowLeaveBrowser = true;
-                let returnUrl = getBaseURI() + `module.html?course=${result[0].Course_FK}&module=${result[0].Module_FK}`;
+                let returnUrl = getBaseURI() + `module.html?course=${Activity[0].Course_FK}&module=${Activity[0].Module_FK}`;
                 window.open(returnUrl, "_self");
                 return;
             }
@@ -129,7 +134,7 @@ function doGetQuestions(Activity_PK){
         result.forEach((question, index) => {
             let newCounter = index + 1;
             allQuestions += container_start;
-            allQuestions += question_header_template.replace('{0}', newCounter).replace('{1}', question.Statement);
+            allQuestions += question_header_template.replace('{0}', newCounter).replace('{1}', question.Statement.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"));
             Object.keys(question).forEach(key => {
                 if((key.includes('Answer') == true) && (key.includes('Score') == false) && (question[key] != null)){
                     allQuestions += question_lineitem_template.replace('{0}', question.Question_PK)
@@ -206,11 +211,11 @@ function doSubmitActivity(){
                 return;
             }
             alert(result.message);
-            let returnUrl = getBaseURI() + `module.html?course=${result.activity.Course_FK}&module=${result.activity.Module_FK}`;
+            let returnUrl = getBaseURI() + `module.html?course=${result.activity.Activity[0].Course_FK}&module=${result.activity.Activity[0].Module_FK}`;
             window.open(returnUrl, "_self");
         })
         .catch(async (error) => {
-            alert('An unknown error occurred. Please contact support, or try again later.');
+            alert('hre 2' + 'An unknown error occurred. Please contact support, or try again later.');
             console.log(JSON.stringify(error));
         })
     }

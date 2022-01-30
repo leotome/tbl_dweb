@@ -11,7 +11,7 @@ exports.cRud_activitiesById = async (req, res) => {
         const message = { message: "Missing parameter Activity_PK." };
         return res.status(400).send(message);
     }
-    activities.cRud_activitiesById({ Activity_PK : req.params.Activity_PK })
+    activities.cRud_activitiesById({ Activity_PK : req.params.Activity_PK, Student_FK : TokenData.User_PK })
     .then(result => {
         return res.status(200).send(result);
     })
@@ -78,7 +78,6 @@ exports.cRud_questionsByActivity = async (req, res) => {
 }
 
 exports.Crud_submitActivity = async (req, res) => {
-    console.log('Crud_submitActivity')
     let TokenData = utils.authenticateToken(req);
     if(TokenData === null){
         const message = { message: "You are not authorized to perform this action." };
@@ -130,9 +129,9 @@ exports.Crud_submitActivity = async (req, res) => {
         })
         activities.Crud_activitySubmit(ActivityDoneStudent, ActivityAnswersStudent)
         .then(insert_result => {
-            activities.cRud_activitiesById({ Activity_PK : req.params.Activity_PK })
+            activities.cRud_activitiesById({ Activity_PK : req.params.Activity_PK, Student_FK : TokenData.User_PK })
             .then(actv_result => {
-                return res.status(200).send({ message : "The activity was successfully submitted!", activity : actv_result [0] });
+                return res.status(200).send({ message : "The activity was successfully submitted!", activity : actv_result });
             })
             .catch(error => {
                 return res.status(401).send({message: JSON.stringify(error)});
