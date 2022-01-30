@@ -101,11 +101,59 @@ exports.Crud_activitySubmit = (ActivityDoneStudent, ActivityAnswersStudent) => {
                 conn
                 .query("INSERT INTO ActivityAnswerStudent (Activity_FK, Student_FK, Question_FK, Answer, Score) VALUES ?", [ActivityAnswersStudent.map(item => [item.Activity_FK, item.Student_FK, item.Question_FK, item.Answer, item.Score])])
                 .then(([result_ActivityAnswerStudent]) => {
-                    resolve([result_ActivityDoneStudent, result_ActivityAnswerStudent]);
+                    this.cRud_checkModuleFinished({Activity_FK : ActivityDoneStudent.Activity_FK})
+                    .then(trigger_result => {
+                        let result_allStudents = trigger_result.find(({Type}) => Type == 'AllStudents').Value;
+                        let result_finishedActivities = trigger_result.find(({Type}) => Type == 'FinishedActivities').Value;
+                        let result_discussionParticipations = trigger_result.find(({Type}) => Type == 'DiscussionParticipations').Value;
+                        let result_achievements = trigger_result.find(({Type}) => Type == 'Achievements').Value;
+
+                        let HasActivitiesFinished = (result_allStudents < result_finishedActivities);
+                        let HasAllDiscussionParticipations = (result_allStudents == result_discussionParticipations);
+                        let HasNotAchievements = (result_allStudents > result_achievements);
+                        if(HasActivitiesFinished && HasAllDiscussionParticipations && HasNotAchievements){
+                            conn
+                            .query("INSERT INTO StudentAchievement (Student_FK, ModuleCompleted_FK) SELECT CG.Student_FK, M.Module_PK FROM CourseGroup CG INNER JOIN Module M ON CG.Course_FK = M.Course_FK WHERE M.Module_PK IN (SELECT Module_FK FROM Activity WHERE Activity_PK = ?)", [ActivityDoneStudent.Activity_FK])
+                            .then(([result_insert]) => {
+                                resolve([result_ActivityDoneStudent, result_ActivityAnswerStudent, trigger_result, result_insert]);
+                            })
+                            .catch(error => {
+                                reject(error.sqlMessage);
+                            })
+                        } else {
+                            resolve([result_ActivityDoneStudent, result_ActivityAnswerStudent, trigger_result]);
+                        }
+                    })
                 })
                 .catch((error) => {
                     reject(error.sqlMessage);
                 });
+            })
+            .catch((error) => {
+                reject(error.sqlMessage);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            reject(error);
+        });
+    });
+}
+
+exports.cRud_checkModuleFinished = (params) => {
+    return new Promise((resolve, reject) => {
+        mysql.connect()
+        .then((conn) => {
+            let allStudents = `SELECT 'AllStudents' AS Type, COUNT(CG.Student_FK) AS Value FROM CourseGroup CG INNER JOIN Module M ON CG.Course_FK = M.Course_FK WHERE M.Module_PK IN (SELECT Module_FK FROM Activity WHERE Activity_PK = ${params.Activity_FK})`;
+            let finishedActivities = `SELECT 'FinishedActivities' AS Type, COUNT(Student_FK) AS Value FROM ActivityDoneStudent WHERE Activity_FK = ${params.Activity_FK} OR (Activity_FK IN (SELECT Group_ParentActivity_FK FROM Activity WHERE Activity_PK = ${params.Activity_FK}))`;
+            let discussionParticipations = `SELECT DISTINCT 'DiscussionParticipations' AS Type, COUNT(DISTINCT CreatedBy_FK) AS Value FROM ModuleDiscussion WHERE Module_FK IN (SELECT Module_FK FROM Activity WHERE Activity_PK = ${params.Activity_FK})`;
+            let achievements = `SELECT DISTINCT 'Achievements' AS Type, COUNT(Student_FK) AS Value FROM StudentAchievement WHERE ModuleCompleted_FK IN (SELECT Module_FK FROM Activity WHERE Activity_PK = ${params.Activity_FK})`;
+            let unionKeyword = " UNION ";
+            let query = allStudents + unionKeyword + finishedActivities + unionKeyword + discussionParticipations + unionKeyword + achievements;
+            conn
+            .query(query)
+            .then(([result]) => {
+                resolve(result);
             })
             .catch((error) => {
                 reject(error.sqlMessage);
