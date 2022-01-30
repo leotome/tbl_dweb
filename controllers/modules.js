@@ -12,7 +12,7 @@ exports.cRud_modulesByCourse = async (req, res) => {
         const message = { message: "Missing parameter." };
         return res.status(400).send(message);
     }
-    modules.cRud_modulesByCourse({Language : TokenData.Language, Course_FK : req.params.Course_PK})
+    modules.cRud_modulesByCourse({Course_FK : req.params.Course_PK})
     .then(result => {
         if(TokenData.Language == 'en'){
             res.status(200).send(result);

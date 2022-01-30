@@ -69,7 +69,6 @@ function doGetActivities(Course_PK, Module_PK){
             alert('An unknown error occurred. Please contact support, or try again later.');
             return;
         }
-        //let cardTemplate = '<div class="row"><div class="col-lg-3 col-md-4 col-sm-6"><div class="featured__item"><div class="featured__item__pic" style="{0}"></div><div class="featured__item__text"><h6><a href="{1}">{2}</a></h6></div></div></div></div>';
         let cardTemplate = '<div class="col-lg-3 col-md-4 col-sm-6"><div class="featured__item"><a href="javascript:void(0);" data-toggle="modal" data-target="#activity_modal" data-activity="{1}"><div class="featured__item__pic" style="{0}"></div><div class="featured__item__text"><h6>{2}</h6></div></a></div></div>';
         let allCards = '';
         result.forEach(record => {

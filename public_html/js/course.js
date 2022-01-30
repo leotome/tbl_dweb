@@ -26,7 +26,6 @@ function doGetCourse(Course_PK){
     fetch(request_url)
     .then(async (response) => {
         var result = await response.json();
-        console.log(result)
         var success = response.ok;
         if(result.message && success == false){
             alert(result.message);
@@ -54,7 +53,6 @@ function doGetModules(Course_PK){
     fetch(request_url)
     .then(async (response) => {
         var result = await response.json();
-        console.log(result)
         var success = response.ok;
         if(result.message && success == false){
             alert(result.message);
@@ -63,11 +61,12 @@ function doGetModules(Course_PK){
             alert('An unknown error occurred. Please contact support, or try again later.');
             return;
         }
-
+        
         let cardTemplate = '<div class="col-lg-3 col-md-4 col-sm-6"><div class="featured__item"><a href="module.html?course={1}&module={2}"><div class="featured__item__pic" style="{0}"></div><div class="featured__item__text"><h6>{3}</h6></div></a></div></div>';
         let allCards = '';
         result.forEach(record => {
-            allCards += cardTemplate.replace('{0}', 'background-image: url(' + record.ImagePath + ')').replace('{1}', Course_PK).replace('{2}', record.Module_PK).replace('{3}', record.Name);
+            console.log()
+            allCards += cardTemplate.replace('{0}', 'background-image: url(' + record.ImagePath + ')').replace('{1}', Course_PK).replace('{2}', record.Module_PK).replace('{3}', ((record.Achievements > 0) ? '<i class="fa fa-trophy"></i>&nbsp;' + record.Name + '&nbsp;<i class="fa fa-trophy"></i>': record.Name));
         })
         let tbl_modules_container = document.getElementById("tbl_modules_container");
         tbl_modules_container.innerHTML = allCards;
