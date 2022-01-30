@@ -6,7 +6,7 @@ exports.cRud_discussionsByModule = (params) => {
         mysql.connect()
         .then((conn) => {
             conn
-            .query("SELECT D.Discussion_PK, D.Module_FK, D.Body, D.CreatedDate, CONCAT(U.FirstName, ' ', U.LastName) AS CreatedByName, U.Email AS CreatedByEmail FROM ModuleDiscussion D INNER JOIN User U ON D.CreatedBy_FK = U.User_PK WHERE D.Module_FK = ? ORDER BY CreatedDate DESC", [params.Module_FK])
+            .query("SELECT D.Discussion_PK, D.Module_FK, D.Body, D.CreatedDate, CONCAT(U.FirstName, ' ', U.LastName) AS CreatedByName, U.Email AS CreatedByEmail, COUNT(SA.ModuleCompleted_FK) AS Achievements FROM ModuleDiscussion D LEFT JOIN StudentAchievement SA ON D.Module_FK = SA.ModuleCompleted_FK INNER JOIN User U ON D.CreatedBy_FK = U.User_PK WHERE D.Module_FK = ? GROUP BY D.Discussion_PK, D.Module_FK ORDER BY D.CreatedDate DESC", [params.Module_FK])
             .then(([result]) => {                
                 resolve(result);
             })

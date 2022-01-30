@@ -8,12 +8,8 @@
     $(window).on('load', function () {
         let token = this.getIsAuthenticated();
         let Course_PK = this.getURLParameter('course');
-        console.log(Course_PK);        
         let Module_PK = this.getURLParameter('module');
-        console.log(Module_PK);
-      
-        
-        
+
         this.doGetModule(Course_PK, Module_PK);
         this.doGetActivities(Course_PK, Module_PK);
         this.doGetDiscussions(Course_PK, Module_PK);
@@ -40,15 +36,18 @@ function doGetModule(Course_PK, Module_PK){
             alert('An unknown error occurred. Please contact support, or try again later.');
             return;
         }
-
+        let Completed = (result.Achievements > 0);
         let tbl_module_name = document.getElementById("tbl_module_name");
-        tbl_module_name.innerHTML = result.Name;
+        tbl_module_name.innerHTML = (Completed) ? '<i class="fa fa-trophy"></i>&nbsp;' + result.Name + '&nbsp;<i class="fa fa-trophy"></i>' : result.Name;
         let tbl_module_description = document.getElementById("tbl_module_description");
-        tbl_module_description.innerHTML = result.Description;
+        tbl_module_description.innerHTML = (Completed) ? '<b>This module has already been completed, therefore you have limited access. You may move on to the next activity, when appropriate.</b><br/><br/>' + result.Description : result.Description;;
         let tbl_module_header = document.getElementById("tbl_module_header");
         tbl_module_header.style.background = 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(' + result.ImagePath + ')';
         document.title = result.Name + ' | Team-based Learning';
-        
+        if(Completed){
+            let tbl_discussion_form = document.getElementById("tbl_discussion_form");
+            tbl_discussion_form.innerHTML= null;
+        }
     })
     .catch(async (error) => {
         alert('An unknown error occurred. Please contact support, or try again later.');
@@ -105,7 +104,7 @@ function doGetDiscussions(Course_PK, Module_PK){
             let container_end = '</table>';
             let allDiscussions = container_start;
             result.forEach(record => {
-                if(record.CreatedByIsLogged == true){
+                if(record.CreatedByIsLogged == true && record.Achievements == 0){
                     allDiscussions += container_item_isOwner.replace('{0}', record.CreatedByName).replace('{1}', new Date(record.CreatedDate).toISOString().slice(0, 19).replace('T', ' ')).replace('{2}', record.Body).replace('{3}', record.Discussion_PK);
                 } else {
                     allDiscussions += container_item_notOwner.replace('{0}', record.CreatedByName).replace('{1}', new Date(record.CreatedDate).toISOString().slice(0, 19).replace('T', ' ')).replace('{2}', record.Body);
