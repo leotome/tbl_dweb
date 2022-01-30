@@ -39,16 +39,13 @@ exports.Crud_insertPost = (params) => {
                     let HasAllDiscussionParticipations = (result_allStudents == result_discussionParticipations);
                     let HasNotAchievements = (result_allStudents > result_achievements);
                     if(HasActivitiesFinished && HasAllDiscussionParticipations && HasNotAchievements){
-                        mysql.connect()
-                        .then((conn_trigger) => {
-                            conn_trigger
-                            .query("INSERT INTO StudentAchievement (Student_FK, ModuleCompleted_FK) SELECT CG.Student_FK, M.Module_PK FROM CourseGroup CG INNER JOIN Module M ON CG.Course_FK = M.Course_FK WHERE M.Module_PK = ?", [params.Module_FK])
-                            .then(([result_insert]) => {
-                                resolve([result, result_insert]);
-                            })
-                            .catch(error => {
-                                reject(error.sqlMessage);
-                            })
+                        conn
+                        .query("INSERT INTO StudentAchievement (Student_FK, ModuleCompleted_FK) SELECT CG.Student_FK, M.Module_PK FROM CourseGroup CG INNER JOIN Module M ON CG.Course_FK = M.Course_FK WHERE M.Module_PK = ?", [params.Module_FK])
+                        .then(([result_insert]) => {
+                            resolve([result, result_insert]);
+                        })
+                        .catch(error => {
+                            reject(error.sqlMessage);
                         })
                     } else {
                         resolve(result);
