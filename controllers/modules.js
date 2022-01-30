@@ -14,16 +14,7 @@ exports.cRud_modulesByCourse = async (req, res) => {
     }
     modules.cRud_modulesByCourse({Course_FK : req.params.Course_PK})
     .then(result => {
-        if(TokenData.Language == 'en'){
-            res.status(200).send(result);
-        } else {
-            result.forEach(record => {
-                record.Module_PK = record.Parent_FK;
-                record.Parent_FK = undefined;
-            })
-            res.status(200).send(result);
-        }
-        
+        res.status(200).send(result);        
     })
     .catch(error => {
         return res.status(401).send({message: JSON.stringify(error)});
