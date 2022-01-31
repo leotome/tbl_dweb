@@ -202,7 +202,7 @@ function doGetActivity(Activity_PK){
 
         let Activity = result.Activity;
         let ActivityDoneStudent = result.ActivityDoneStudent;
-
+        
         let tbl_modal_activity_header = document.getElementById("tbl_modal_activity_header");
         tbl_modal_activity_header.innerHTML = Activity[0].Title;
         let tbl_modal_activity_body = document.getElementById("tbl_modal_activity_body");
@@ -213,12 +213,13 @@ function doGetActivity(Activity_PK){
         tbl_modal_activity_footer_start.disabled = false;
         tbl_modal_activity_footer_start.setAttribute("onclick",`doStartActivity(${Activity_PK})`);
         tbl_modal_activity_panel.innerHTML = null;
-        if(ActivityDoneStudent.length > 0 && Activity[0].Type_FK == 1){
+        let reviewActivityUrl = getBaseURI() + `review_activity.html?activity=${Activity[0].Activity_PK}`;
+        if(ActivityDoneStudent.filter(({IsLoggedUser}) => IsLoggedUser == 1).length > 0 && Activity[0].Type_FK == 1){
             tbl_modal_activity_footer_start.disabled = true;            
-            tbl_modal_activity_panel.innerHTML = '<br/><p><b>You have already submitted this activity.</b></p>';
+            tbl_modal_activity_panel.innerHTML = '<br/><p><b>You have already submitted this activity.</b></p>'+ `<a href="${reviewActivityUrl}" target="_blank">Review activity</a>`;
         } else if(ActivityDoneStudent.length > 0 && Activity[0].Type_FK == 2) {
             tbl_modal_activity_footer_start.disabled = true;            
-            tbl_modal_activity_panel.innerHTML = '<br/><p><b>This activity has already been submitted by a member of your group.</b></p>';
+            tbl_modal_activity_panel.innerHTML = '<br/><p><b>This activity has already been submitted by a member of your group.</b></p><br/>' + `<a href="${reviewActivityUrl}" target="_blank">Review activity</a>`;
         } else if(ActivityDoneStudent.length == 0 && Activity[0].Type_FK == 2) {
             let activity_countStudents_request_url = getAPIURI() + `/activities/${Activity[0].Group_ParentActivity_FK}/countStudents`;
             fetch(activity_countStudents_request_url)

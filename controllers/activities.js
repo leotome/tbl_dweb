@@ -58,25 +58,6 @@ exports.cRud_activitiesByModule = async (req, res) => {
     })
 }
 
-exports.cRud_questionsByActivity = async (req, res) => {
-    let TokenData = utils.authenticateToken(req);
-    if(TokenData === null){
-        const message = { message: "You are not authorized to perform this action." };
-        return res.status(400).send(message);
-    }
-    if(req.params.Activity_PK === null){
-        const message = { message: "Missing parameter Activity_PK." };
-        return res.status(400).send(message);
-    }    
-    activities.cRud_questionsByActivity({Activity_PK : req.params.Activity_PK})
-    .then(result => {
-        return res.status(200).send(result);
-    })
-    .catch(error => {
-        return res.status(401).send({message: JSON.stringify(error)});
-    })
-}
-
 exports.Crud_submitActivity = async (req, res) => {
     let TokenData = utils.authenticateToken(req);
     if(TokenData === null){

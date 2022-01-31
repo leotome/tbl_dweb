@@ -31,7 +31,7 @@ exports.cRud_activitiesById = (params) => {
             })
             .then((ActivityDB) => {
                 conn
-                .query("SELECT AD.ActivityDoneStudent_PK, AD.IsCompleted, AD.TotalScore FROM ActivityDoneStudent AD WHERE AD.Activity_FK = ? AND AD.Student_FK = ?", [params.Activity_PK, params.Student_FK])
+                .query(`SELECT AD.ActivityDoneStudent_PK, AD.IsCompleted, AD.TotalScore, IF(AD.Student_FK=${params.Student_FK},1,0) AS IsLoggedUser FROM ActivityDoneStudent AD WHERE AD.Activity_FK = ${params.Activity_PK}`)
                 .then(([result]) => {
                     let full = {
                         Activity : ActivityDB,
@@ -58,26 +58,6 @@ exports.cRud_numberOfStudentsActivity = (params) => {
             conn
             .query("SELECT 'AllStudents' AS Type, COUNT(CG.Student_FK) AS No_Students FROM CourseGroup CG INNER JOIN Module M ON CG.Course_FK = M.Course_FK INNER JOIN Activity A ON M.Module_PK = A.Module_FK WHERE Activity_PK = ? UNION SELECT 'StudentsFinishedActivity' AS Type, COUNT(Student_FK) AS No_Students FROM ActivityDoneStudent WHERE Activity_FK = ?", [params.Activity_PK, params.Activity_PK])
             .then(([result]) => {
-                resolve(result);
-            })
-            .catch((error) => {
-                reject(error.sqlMessage);
-            });
-        })
-        .catch((error) => {
-            console.log(error);
-            reject(error);
-        });
-    });
-}
-
-exports.cRud_questionsByActivity = (params) => {
-    return new Promise((resolve, reject) => {
-        mysql.connect()
-        .then((conn) => {
-            conn
-            .execute("SELECT Q.Question_PK, Q.Statement, Q.Answer1_Text, Q.Answer1_Score, Q.Answer2_Text, Q.Answer2_Score, Q.Answer3_Text, Q.Answer3_Score, Q.Answer4_Text, Q.Answer4_Score, Q.Answer5_Text, Q.Answer5_Score FROM Question Q WHERE Q.Question_PK IN (SELECT Question_FK FROM ActivityQuestion WHERE Activity_FK = ?)", [params.Activity_PK])
-            .then(([result]) => {                
                 resolve(result);
             })
             .catch((error) => {

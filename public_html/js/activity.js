@@ -51,7 +51,7 @@ function doGetActivity(Activity_PK){
 
         // A little bit like spaghetti code, but we don't have time for better solutions 
 
-        if(ActivityDoneStudent.length > 0 && Activity[0].Type_FK == 1){
+        if(ActivityDoneStudent.filter(({IsLoggedUser}) => IsLoggedUser == 1).length > 0 && Activity[0].Type_FK == 1){
             alert('You have already submitted this activity.');
             Global_AllowLeaveBrowser = true;
             let returnUrl = getBaseURI() + `module.html?course=${Activity[0].Course_FK}&module=${Activity[0].Module_FK}`;
