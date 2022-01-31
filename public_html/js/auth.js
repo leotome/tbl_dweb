@@ -35,6 +35,7 @@ function doLogin(){
         console.log('doLogin().result', result);
         localStorage.setItem("tbl_app", result.accessToken);
         localStorage.setItem("tbl_user", result.fullName);
+        localStorage.setItem("tbl_student", result.Type_FK);
         let my_page = this.getBaseURI() + 'my.html';
         window.open(my_page, "_self");
     })

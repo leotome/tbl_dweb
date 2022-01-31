@@ -9,10 +9,14 @@
         $(".loader").fadeOut();
         $("#preloder").delay(200).fadeOut("slow");
 
-        let token = localStorage.getItem('tbl_app');
-        if(token){
+        let tbl_app = localStorage.getItem('tbl_app');
+        let tbl_student = localStorage.getItem('tbl_student');
+        if(tbl_app && tbl_student){
             let logged = `<li><a href="./user.html">${localStorage.getItem('tbl_user')}</a></li><li><a href="#" onclick="doLogout()">Logout</a></li>`;
             let fullmenu = `<li><a href="./my.html">My Courses</a></li>`;
+            if(tbl_student == 0){
+                fullmenu = `<li><a href="./admin.html">Administrative View</a></li>`;
+            }
             $("#tbl_usermenu").empty().append(logged);
             $("#tbl_menu").append(fullmenu);
         }
