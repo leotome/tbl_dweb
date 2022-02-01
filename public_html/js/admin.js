@@ -66,20 +66,25 @@ function doGetAll(endpoint, target_id){
         }
 
         if(result.length > 0){
+            let status_text = 'Information retrieved from the server at ' + new Date().toISOString().slice(0, 19).replace('T', ' ');
+            let start_section = '<details style="width:100%;"><summary>' + status_text + '</summary>';
+            let end_section = '</details>';
+
             let table_container_start = '<table>';
             let table_header_start = '<thead><tr>'
             let table_header_end = '</tr></thead>'
             let table_body_start = '<tbody>'
             let table_body_end = '</tbody>'
-            let table_container_end = '</table><br/><p>Information retrieved from the server at ' + new Date().toISOString().slice(0, 19).replace('T', ' ') + '</p>';
+            let table_container_end = '</table>';
             let allHTML = '';
-    
+            allHTML += start_section;
+
             allHTML += table_container_start;
             
             // STEP #1: CREATE HEADER BASED ON JSON KEYS ## START ## //
             allHTML += table_header_start;
             Object.keys(result[0]).forEach(key => {
-                allHTML += '<td>' + key + '</td>';
+                allHTML += '<td><b>' + key + '</b></td>';
             })
             allHTML += table_header_end;
             // STEP #1: CREATE HEADER BASED ON JSON KEYS ## START ## //
@@ -99,6 +104,7 @@ function doGetAll(endpoint, target_id){
             // STEP #2: POPULATE BODY BASED ON JSON RECORD VALUES ## END ## //
 
             allHTML += table_container_end;
+            allHTML += end_section;
 
             // STEP #3: INJECT HTML INTO BODY ## START ## //
             let target_element = document.getElementById(target_id);

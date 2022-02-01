@@ -22,7 +22,7 @@ exports.login = async (req, res) => {
                 LastName : result[0].LastName,
                 Phone : result[0].Phone,
                 Email : result[0].Email,
-                Language : result[0].Language
+                Type_FK : result[0].Type_FK
             };
             const accessToken = jwt.sign(User, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 7 * 60 * 60});
             res.cookie("tbl_app", accessToken, {maxAge: 1000 * 60 * 60 * 7, httpOnly: true});
@@ -128,7 +128,7 @@ exports.cRud_getAllUsers = async (req, res) => {
     }
     users.cRud_getAllUsers()
     .then((result) => {
-        if(result.find(({User_PK}) => User_PK == TokenData.User_PK).Type_FK == 0){
+        if(result.find(({User_PK}) => User_PK == TokenData.User_PK).Type_PK == 0){
             return res.status(200).send(result);
         } else {
             const message = { message: "You are not authorized to perform this action." };

@@ -5,7 +5,7 @@ exports.cRud_usersByEmail = (params) => {
         mysql.connect()
         .then((conn) => {
             conn
-            .query("SELECT User_PK, FirstName, LastName, Language, Phone, Email, Password, Type_FK FROM User WHERE Email IN (?)", [params.Email])
+            .query("SELECT User_PK, FirstName, LastName, Phone, Email, Password, Type_FK FROM User WHERE Email IN (?)", [params.Email])
             .then(([result]) => {
                 resolve(result);
             })
@@ -66,7 +66,7 @@ exports.cRud_getAllUsers = () => {
         mysql.connect()
         .then((conn) => {
             conn
-            .query("SELECT User_PK, FirstName, LastName, Language, Phone, Email, Type_FK FROM User")
+            .query("SELECT User_PK, FirstName, LastName, Phone, Email, UserType.Type_PK, UserType.Name AS Type_Name FROM User INNER JOIN UserType ON User.Type_FK = UserType.Type_PK")
             .then(([result]) => {
                 resolve(result);
             })

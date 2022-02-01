@@ -5,7 +5,7 @@ exports.cRud_studentCourses = (data) => {
         mysql.connect()
         .then((conn) => {
             conn
-            .query("SELECT C.Course_PK, C.Name, C.ImagePath FROM Course C WHERE C.Language = ? AND (C.Course_PK OR C.Parent_FK) IN (SELECT CG.Course_FK FROM CourseGroup CG INNER JOIN User U ON CG.Student_FK = U.User_PK WHERE U.Email = ?)", [data.Language, data.Email])
+            .query("SELECT C.Course_PK, C.Name, C.ImagePath FROM Course C WHERE C.Course_PK IN (SELECT CG.Course_FK FROM CourseGroup CG INNER JOIN User U ON CG.Student_FK = U.User_PK WHERE U.Email = ?)", [data.Email])
             .then(([result]) => {                
                 resolve(result);
             })

@@ -36,8 +36,13 @@ function doLogin(){
         localStorage.setItem("tbl_app", result.accessToken);
         localStorage.setItem("tbl_user", result.fullName);
         localStorage.setItem("tbl_student", result.Type_FK);
-        let my_page = this.getBaseURI() + 'my.html';
-        window.open(my_page, "_self");
+        if(result.Type_FK == 0){
+            let my_page = this.getBaseURI() + 'admin.html';
+            window.open(my_page, "_self");            
+        } else {
+            let my_page = this.getBaseURI() + 'my.html';
+            window.open(my_page, "_self");
+        }
     })
     .catch(async (error) => {
         alert('doLogin().error = ' + JSON.stringify(error));
