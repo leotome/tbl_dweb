@@ -21,12 +21,11 @@ exports.login = async (req, res) => {
                 FirstName : result[0].FirstName,
                 LastName : result[0].LastName,
                 Phone : result[0].Phone,
-                Email : result[0].Email,
-                Type_FK : result[0].Type_FK
+                Email : result[0].Email
             };
             const accessToken = jwt.sign(User, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 7 * 60 * 60});
             res.cookie("tbl_app", accessToken, {maxAge: 1000 * 60 * 60 * 7, httpOnly: true});
-            return res.status(200).json({ message : "Login sucessful!", fullName : User.FirstName + ' ' + User.LastName , accessToken: accessToken });
+            return res.status(200).json({ message : "Login sucessful!", fullName : User.FirstName + ' ' + User.LastName , accessToken: accessToken, Type_FK : result[0].Type_FK });
         } else {
             const message = { message : "Password incorrect." };
             return res.status(401).send(message);
