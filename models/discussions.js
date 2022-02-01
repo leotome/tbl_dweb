@@ -112,12 +112,12 @@ exports.cRud_checkModuleFinished = (params) => {
     });
 }
 
-exports.cRud_allDiscussions = (params) => {
+exports.cRud_allDiscussions = () => {
     return new Promise((resolve, reject) => {
         mysql.connect()
         .then((conn) => {
             conn
-            .query("SELECT D.Discussion_PK, D.Module_FK, D.Body, D.CreatedDate, CONCAT(U.FirstName, ' ', U.LastName) AS CreatedByName, U.Email AS CreatedByEmail FROM ModuleDiscussion D INNER JOIN User U ON D.CreatedBy_FK = U.User_PK ORDER BY D.CreatedDate DESC", [params.Module_FK])
+            .query("SELECT D.Discussion_PK, D.Module_FK, D.Body, D.CreatedDate, CONCAT(U.FirstName, ' ', U.LastName) AS CreatedByName, U.Email AS CreatedByEmail FROM ModuleDiscussion D INNER JOIN User U ON D.CreatedBy_FK = U.User_PK ORDER BY D.CreatedDate DESC")
             .then(([result]) => {                
                 resolve(result);
             })

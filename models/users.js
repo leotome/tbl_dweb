@@ -66,7 +66,7 @@ exports.cRud_getAllUsers = () => {
         mysql.connect()
         .then((conn) => {
             conn
-            .query("SELECT User_PK, FirstName, LastName, Language, Phone, Email, Password, Type_FK FROM User")
+            .query("SELECT User_PK, FirstName, LastName, Language, Phone, Email, Type_FK FROM User")
             .then(([result]) => {
                 resolve(result);
             })

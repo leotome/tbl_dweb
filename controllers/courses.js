@@ -47,25 +47,9 @@ exports.cRud_allCourses = async (req, res) => {
         const message = { message: "You are not authorized to perform this action." };
         return res.status(400).send(message);
     }
-    // FIRST, WE NEED TO VERIFY IF LOGGED USER IS SYSTEM ADMINISTRATOR
-    // PERFORM THIS QUERY, THEN DECIDE...
-    users.cRud_usersByEmail(TokenData.Email)
+    courses.cRud_allCourses()
     .then(result => {
-        // SYSTEM ADMINISTRATOR PROFILE IS Type_FK = 0
-        if(result.Type_FK != 0){
-            // IF IT ISN'T, RETURN NOT AUTHORIZED.
-            const message = { message: "You are not authorized to perform this action." };
-            return res.status(400).send(message);
-        } else {
-            // IF IT IS, GET ALL COURSES
-            courses.cRud_allCourses()
-            .then(result => {
-                res.status(200).send(result);
-            })
-            .catch(error => {
-                return res.status(401).send({message: JSON.stringify(error)});
-            })
-        }
+        res.status(200).send(result);
     })
     .catch(error => {
         return res.status(401).send({message: JSON.stringify(error)});

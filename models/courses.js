@@ -45,7 +45,7 @@ exports.cRud_allCourses = () => {
         mysql.connect()
         .then((conn) => {
             conn
-            .query("SELECT C.Course_PK, C.Name, C.ImagePath FROM Course")
+            .query("SELECT C.Course_PK, C.Name, C.ImagePath FROM Course C")
             .then(([result]) => {                
                 resolve(result);
             })
