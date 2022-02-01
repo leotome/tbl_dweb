@@ -1,5 +1,6 @@
 const utils = require("./config_utils");
 const activities = require("../models/config_models").activities;
+const questions = require("../models/config_models").questions;
 
 exports.cRud_activitiesById = async (req, res) => {
     let TokenData = utils.authenticateToken(req);
@@ -72,7 +73,7 @@ exports.Crud_submitActivity = async (req, res) => {
         const message = { message: "Body cannot be empty." };
         return res.status(400).send(message);
     }
-    activities.cRud_questionsByActivity({Activity_PK : req.params.Activity_PK})
+    questions.cRud_questionsByActivity({Activity_PK : req.params.Activity_PK})
     .then(result => {
         let dbChoices = result;
         let userChoices = req.body;

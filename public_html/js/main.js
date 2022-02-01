@@ -59,3 +59,7 @@
     });
 
 })(jQuery);
+
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,pt'}, 'google_translate_element');
+}
