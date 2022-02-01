@@ -119,3 +119,23 @@ exports.crUd_updateUser = async (req, res) => {
         });
     }
 };
+
+exports.cRud_getAllUsers = async (req, res) => {
+    let TokenData = utils.authenticateToken(req);
+    if(TokenData === null){
+        const message = { message: "You are not authorized to perform this action." };
+        return res.status(400).send(message);
+    }
+    users.cRud_getAllUsers()
+    .then((result) => {
+        if(result.find(({User_PK}) => User_PK == TokenData.User_PK).Type_FK == 0){
+            return res.status(200).send(result);
+        } else {
+            const message = { message: "You are not authorized to perform this action." };
+            return res.status(400).send(message);
+        }
+    })
+    .catch((error) => {
+        res.status(400).send({message: JSON.stringify(error)});
+    });
+};

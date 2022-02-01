@@ -60,3 +60,24 @@ exports.crUd_updateUser = (params) => {
         });
     });
 }
+
+exports.cRud_getAllUsers = () => {
+    return new Promise((resolve, reject) => {
+        mysql.connect()
+        .then((conn) => {
+            conn
+            .query("SELECT User_PK, FirstName, LastName, Language, Phone, Email, Password, Type_FK FROM User")
+            .then(([result]) => {
+                resolve(result);
+            })
+            .catch((error) => {
+                reject(error.sqlMessage);
+            });
+        })
+        .catch((error) => {
+            console.log("Query:");
+            console.log(error);
+            reject(error);
+        });
+    });
+}

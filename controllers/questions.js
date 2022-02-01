@@ -38,3 +38,18 @@ exports.cRud_questionsAnsweredByActivity = async (req, res) => {
         return res.status(401).send({message: JSON.stringify(error)});
     })
 }
+
+exports.cRud_allQuestions = async (req, res) => {
+    let TokenData = utils.authenticateToken(req);
+    if(TokenData === null){
+        const message = { message: "You are not authorized to perform this action." };
+        return res.status(400).send(message);
+    }
+    questions.cRud_allQuestions()
+    .then(result => {
+        return res.status(200).send(result);
+    })
+    .catch(error => {
+        return res.status(401).send({message: JSON.stringify(error)});
+    })
+}

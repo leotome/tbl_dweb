@@ -59,3 +59,23 @@ exports.cRud_questionsAnsweredByActivity = (params) => {
         });
     });
 }
+
+exports.cRud_allQuestions = () => {
+    return new Promise((resolve, reject) => {
+        mysql.connect()
+        .then((conn) => {
+            conn
+            .execute("SELECT Q.Question_PK, Q.Statement, Q.Answer1_Text, Q.Answer1_Score, Q.Answer2_Text, Q.Answer2_Score, Q.Answer3_Text, Q.Answer3_Score, Q.Answer4_Text, Q.Answer4_Score, Q.Answer5_Text, Q.Answer5_Score FROM Question Q")
+            .then(([result]) => {                
+                resolve(result);
+            })
+            .catch((error) => {
+                reject(error.sqlMessage);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            reject(error);
+        });
+    });
+}

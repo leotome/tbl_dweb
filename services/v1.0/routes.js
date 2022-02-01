@@ -26,10 +26,13 @@ module.exports = app => {
     router.post('/users/update', controller.users.crUd_updateUser);
 
     // @http-verb : get
+    // @table : User
+    router.get('/users/all', controller.users.cRud_getAllUsers);  
+
+    // @http-verb : get
     // @table : Course
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
-    router.get('/courses', controller.courses.cRud_allCourses);
-
+    router.get('/courses/all', controller.courses.cRud_allCourses);
 
     // @http-verb : get
     // @table : CourseGroup
@@ -52,6 +55,11 @@ module.exports = app => {
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
     // @body : expects { "Name" : string, "ImagePath" : string }
     router.patch('/courses/:Course_PK/update', controller.courses.crUd_updateCourse);
+
+    // @http-verb : get
+    // @table : Module
+    // @auth : header Authorization Bearer OR Cookie "tbl_app"
+    router.get('/modules/all', controller.modules.cRud_allModules);
 
     // @http-verb : get
     // @table : Module
@@ -91,6 +99,11 @@ module.exports = app => {
     // @http-verb : get
     // @table : Activity
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
+    router.get('/activities/all', controller.activities.cRud_allActivities);
+
+    // @http-verb : get
+    // @table : Activity
+    // @auth : header Authorization Bearer OR Cookie "tbl_app"
     // @body : expects queryString param "Activity_PK", which is the Activity_PK
     router.get('/activities/:Activity_PK', controller.activities.cRud_activitiesById);
 
@@ -117,6 +130,21 @@ module.exports = app => {
     // @auth : header Authorization Bearer OR Cookie "tbl_app"
     // @body : expects queryString param "Activity_PK", which is the Activity_PK
     router.get('/activities/questions/:Activity_PK/answered', controller.questions.cRud_questionsAnsweredByActivity);
+
+    // @http-verb : get
+    // @table : Question
+    // @auth : header Authorization Bearer OR Cookie "tbl_app"
+    router.get('/questions/all', controller.questions.cRud_allQuestions);
+
+    // @http-verb : get
+    // @table : StudentAchievement
+    // @auth : header Authorization Bearer OR Cookie "tbl_app"
+    router.get('/achievements/all', controller.modules.cRud_allAchievements);    
+
+    // @http-verb : get
+    // @table : ModuleDiscussion
+    // @auth : header Authorization Bearer OR Cookie "tbl_app"
+    router.get('/discussions/all', controller.discussions.cRud_allDiscussions);
 
     app.use('/services/v1.0', router);
 }

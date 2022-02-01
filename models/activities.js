@@ -93,7 +93,7 @@ exports.Crud_activitySubmit = (ActivityDoneStudent, ActivityAnswersStudent) => {
                         let HasNotAchievements = (result_allStudents > result_achievements);
                         if(HasActivitiesFinished && HasAllDiscussionParticipations && HasNotAchievements){
                             conn
-                            .query("INSERT INTO StudentAchievement (Student_FK, ModuleCompleted_FK) SELECT CG.Student_FK, M.Module_PK FROM CourseGroup CG INNER JOIN Module M ON CG.Course_FK = M.Course_FK WHERE M.Module_PK IN (SELECT Module_FK FROM Activity WHERE Activity_PK = ?)", [ActivityDoneStudent.Activity_FK])
+                            .query("INSERT INTO StudentAchievement (Student_FK, ModuleCompleted_FK) SELECT CG.Student_FK, M.Module_PK, NOW() FROM CourseGroup CG INNER JOIN Module M ON CG.Course_FK = M.Course_FK WHERE M.Module_PK IN (SELECT Module_FK FROM Activity WHERE Activity_PK = ?)", [ActivityDoneStudent.Activity_FK])
                             .then(([result_insert]) => {
                                 resolve([result_ActivityDoneStudent, result_ActivityAnswerStudent, trigger_result, result_insert]);
                             })
@@ -132,6 +132,26 @@ exports.cRud_checkModuleFinished = (params) => {
             let query = allStudents + unionKeyword + finishedActivities + unionKeyword + discussionParticipations + unionKeyword + achievements;
             conn
             .query(query)
+            .then(([result]) => {
+                resolve(result);
+            })
+            .catch((error) => {
+                reject(error.sqlMessage);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            reject(error);
+        });
+    });
+}
+
+exports.cRud_allActivities = () => {
+    return new Promise((resolve, reject) => {
+        mysql.connect()
+        .then((conn) => {
+            conn
+            .query("SELECT A.Activity_PK, A.Module_FK, A.Title, AT.ActivityType_PK, AT.ImagePath, AT.Name FROM Activity A INNER JOIN ActivityType AT ON A.Type_FK = AT.ActivityType_PK")
             .then(([result]) => {
                 resolve(result);
             })

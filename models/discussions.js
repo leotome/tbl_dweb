@@ -40,7 +40,7 @@ exports.Crud_insertPost = (params) => {
                     let HasNotAchievements = (result_allStudents > result_achievements);
                     if(HasActivitiesFinished && HasAllDiscussionParticipations && HasNotAchievements){
                         conn
-                        .query("INSERT INTO StudentAchievement (Student_FK, ModuleCompleted_FK) SELECT CG.Student_FK, M.Module_PK FROM CourseGroup CG INNER JOIN Module M ON CG.Course_FK = M.Course_FK WHERE M.Module_PK = ?", [params.Module_FK])
+                        .query("INSERT INTO StudentAchievement (Student_FK, ModuleCompleted_FK, CompletionDate) SELECT CG.Student_FK, M.Module_PK, NOW() FROM CourseGroup CG INNER JOIN Module M ON CG.Course_FK = M.Course_FK WHERE M.Module_PK = ?", [params.Module_FK])
                         .then(([result_insert]) => {
                             resolve([result, result_insert]);
                         })
@@ -99,6 +99,26 @@ exports.cRud_checkModuleFinished = (params) => {
             conn
             .query(query)
             .then(([result]) => {
+                resolve(result);
+            })
+            .catch((error) => {
+                reject(error.sqlMessage);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            reject(error);
+        });
+    });
+}
+
+exports.cRud_allDiscussions = (params) => {
+    return new Promise((resolve, reject) => {
+        mysql.connect()
+        .then((conn) => {
+            conn
+            .query("SELECT D.Discussion_PK, D.Module_FK, D.Body, D.CreatedDate, CONCAT(U.FirstName, ' ', U.LastName) AS CreatedByName, U.Email AS CreatedByEmail FROM ModuleDiscussion D INNER JOIN User U ON D.CreatedBy_FK = U.User_PK ORDER BY D.CreatedDate DESC", [params.Module_FK])
+            .then(([result]) => {                
                 resolve(result);
             })
             .catch((error) => {

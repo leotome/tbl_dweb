@@ -76,3 +76,18 @@ exports.cruD_deletePost = async (req, res) => {
         })
     })
 }
+
+exports.cRud_allDiscussions = async (req, res) => {
+    let TokenData = utils.authenticateToken(req);
+    if(TokenData === null){
+        const message = { message: "You are not authorized to perform this action." };
+        return res.status(400).send(message);
+    }
+    discussions.cRud_allDiscussions()
+    .then(result => {
+        return res.status(200).send(result);
+    })
+    .catch(error => {
+        return res.status(401).send({message: JSON.stringify(error)});
+    })
+}

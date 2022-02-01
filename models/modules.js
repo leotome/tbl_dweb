@@ -59,3 +59,43 @@ exports.cRud_moduleStudents = (params) => {
         });
     });
 }
+
+exports.cRud_allModules = () => {
+    return new Promise((resolve, reject) => {
+        mysql.connect()
+        .then((conn) => {
+            conn
+            .query("SELECT M.Module_PK, M.Name, M.Description, M.Course_FK, M.ImagePath FROM Module M ORDER BY M.Module_PK ASC")
+            .then(([result]) => {                
+                resolve(result);
+            })
+            .catch((error) => {
+                reject(error.sqlMessage);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            reject(error);
+        });
+    });
+}
+
+exports.cRud_allAchievements = () => {
+    return new Promise((resolve, reject) => {
+        mysql.connect()
+        .then((conn) => {
+            conn
+            .query("SELECT CONCAT(U.FirstName, ' ', U.LastName) AS StudentName, M.Name, SA.Student_FK, SA.ModuleCompleted_FK, SA.CompletionDate FROM StudentAchievement SA INNER JOIN Module M ON SA.ModuleCompleted_FK = M.Module_PK INNER JOIN User U ON SA.Student_FK = U.User_PK ORDER BY SA.CompletionDate DESC")
+            .then(([result]) => {                
+                resolve(result);
+            })
+            .catch((error) => {
+                reject(error.sqlMessage);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            reject(error);
+        });
+    });
+}

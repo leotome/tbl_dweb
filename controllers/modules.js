@@ -57,3 +57,33 @@ exports.cRud_moduleById = async (req, res) => {
         return res.status(401).send({message: JSON.stringify(error)});
     })
 }
+
+exports.cRud_allModules = async (req, res) => {
+    let TokenData = utils.authenticateToken(req);
+    if(TokenData === null){
+        const message = { message: "You are not authorized to perform this action." };
+        return res.status(400).send(message);
+    }
+    modules.cRud_allModules()
+    .then(result => {
+        res.status(200).send(result);        
+    })
+    .catch(error => {
+        return res.status(401).send({message: JSON.stringify(error)});
+    })
+}
+
+exports.cRud_allAchievements = async (req, res) => {
+    let TokenData = utils.authenticateToken(req);
+    if(TokenData === null){
+        const message = { message: "You are not authorized to perform this action." };
+        return res.status(400).send(message);
+    }
+    modules.cRud_allAchievements()
+    .then(result => {
+        res.status(200).send(result);        
+    })
+    .catch(error => {
+        return res.status(401).send({message: JSON.stringify(error)});
+    })
+}
